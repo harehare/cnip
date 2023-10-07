@@ -1,0 +1,48 @@
+{
+  "name": "cnip",
+  "version": "0.1.0",
+  "keywords": [
+    "rescript",
+    "cli",
+    "snippet"
+  ],
+  "bin": {
+    "cnip": "bin/cli.sh"
+  },
+  "license": "MIT",
+  "author": "harehare",
+  "scripts": {
+    "clean": "rescript clean",
+    "dev": "rescript build -w",
+    "format": "rescript format **/*.res",
+    "build": "rescript && node build.js && terser --compress --mangle -- dist/index.js > dist/index.js2 && mv dist/index.js2 dist/index.js",
+    "test": "rescript && jest"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.1",
+    "clipboardy": "^2.3.0",
+    "fast-fuzzy": "^1.12.0",
+    "ink-text-input": "^4.0.3",
+    "minimist": "^1.2.8",
+    "toml": "^3.0.0",
+    "uuid": "^9.0.0"
+  },
+  "packageManager": "npm@9.2.0",
+  "devDependencies": {
+    "@glennsl/rescript-jest": "^0.10.0",
+    "@rescript-ink/ink-link": "^3.0.0",
+    "@rescript-ink/ink-spinner": "^3.0.0",
+    "@rescript-ink/ink-text-input": "^3.0.0",
+    "@rescript/core": "^0.4.0",
+    "@rescript/react": "^0.11.0",
+    "esbuild": "^0.19.3",
+    "react": "^18.2.0",
+    "rescript": "^10.1.4",
+    "rescript-ink": "^1.3.0",
+    "rescript-json": "^1.0.6",
+    "rescript-nodejs": "^15.0.0",
+    "rescript-struct": "^4.1.1",
+    "rescript-uuid": "^9.0.0-rc",
+    "terser": "^5.19.2"
+  }
+}

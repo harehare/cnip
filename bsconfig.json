@@ -1,0 +1,38 @@
+{
+  "name": "cnip",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    },
+    {
+      "dir": "__tests__",
+      "type": "dev"
+    }
+  ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bsc-flags": [
+    "-open RescriptCore",
+    "-open RescriptStruct",
+    "-open NodeJs",
+    "-open Json"
+  ],
+  "jsx": { "version": 3 },
+  "bs-dependencies": [
+    "@rescript/core",
+    "rescript-ink",
+    "@rescript/react",
+    "@rescript-ink/ink-text-input",
+    "rescript-json",
+    "rescript-nodejs",
+    "rescript-uuid",
+    "rescript-struct",
+    "@rescript-ink/ink-link",
+    "@rescript-ink/ink-spinner"
+  ],
+  "bs-dev-dependencies": ["@glennsl/rescript-jest"]
+}
