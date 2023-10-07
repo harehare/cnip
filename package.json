@@ -16,7 +16,8 @@
     "dev": "rescript build -w",
     "format": "rescript format **/*.res",
     "build": "rescript && node build.js && terser --compress --mangle -- dist/index.js > dist/index.js2 && mv dist/index.js2 dist/index.js",
-    "test": "rescript && jest"
+    "test": "rescript && jest",
+    "publish": "npm run test && npm run build && npm publish --access=public"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.1",
@@ -27,6 +28,10 @@
     "toml": "^3.0.0",
     "uuid": "^9.0.0"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "packageManager": "npm@9.2.0",
   "devDependencies": {
     "@glennsl/rescript-jest": "^0.10.0",
