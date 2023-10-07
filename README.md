@@ -7,7 +7,7 @@ cnip is a simple command-line snippet management tool.
 ## Install
 
 ```bash
-$ npm i -g cnip
+$ npm i -g cnip-snippet
 ```
 
 ## Usage
