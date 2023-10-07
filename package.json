@@ -1,6 +1,6 @@
 {
   "name": "cnip-snippet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "rescript",
     "cli",
@@ -17,7 +17,7 @@
     "format": "rescript format **/*.res",
     "build": "rescript && node build.js && terser --compress --mangle -- dist/index.js > dist/index.js2 && mv dist/index.js2 dist/index.js",
     "test": "rescript && jest",
-    "publish": "npm run test && npm run build && npm publish --access=public"
+    "publish": "npm run test && npm publish --access=public"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.1",
