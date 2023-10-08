@@ -2,7 +2,7 @@
 
 cnip is a simple command-line snippet management tool.
 
-![image](./images/cnip.png)
+![image](/images/cnip.png)
 
 ## Install
 
@@ -23,7 +23,7 @@ AVAILABLE COMMANDS:
     del                      Delete snippet
     import                   Import snippets
     sync                     Sync snippets
-    version                                                                                                         Print version
+    version                  Print version
 
 OPTIONS:
     -c                       Copy selected command to clipboard

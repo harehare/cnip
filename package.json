@@ -30,7 +30,8 @@
   },
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "images"
   ],
   "packageManager": "npm@9.2.0",
   "devDependencies": {
