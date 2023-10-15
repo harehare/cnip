@@ -11,8 +11,10 @@ let make = (~selected: bool, ~tag: string) => {
         ? <Text bold={true} backgroundColor=colors.selectedTab wrap=#"truncate-start">
             {tab->React.string}
           </Text>
-        : <Text bold={true} wrap=#"truncate-start"> {tab->React.string} </Text>}
-      <Text bold={true}> {"|"->React.string} </Text>
+        : <Text backgroundColor=colors.tab color=#white wrap=#"truncate-start">
+            {tab->React.string}
+          </Text>}
+      <Text wrap=#"truncate-start"> {" "->React.string} </Text>
     </>
   }
 }
