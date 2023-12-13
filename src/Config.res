@@ -2,10 +2,7 @@ open Modules
 
 type t = {gistId: string}
 
-let path = `${Process.process
-  ->Process.env
-  ->Dict.get(Process.process->Process.platform == "win32" ? "USERPROFILE" : "HOME")
-  ->Option.getWithDefault("")}/.cnip.config.json`
+let path = `${Constants.configDir}/config.json`
 
 let encode = (config: t): Json.value => {
   open Json.Encode

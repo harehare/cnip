@@ -38,14 +38,13 @@ function(snippetPath) {
 let write = (configPath, config: t) =>
   Fs.writeFileSync(configPath, config->encode->Encode.encode(~indentLevel=2)->Buffer.fromString)
 
-let path = `${Process.process
-  ->Process.env
-  ->Dict.get(Process.process->Process.platform == "win32" ? "USERPROFILE" : "HOME")
-  ->Option.getWithDefault("")}/.cnip.snippet.json`
+let path = `${Constants.configDir}/snippet.json`
 
 let create = (config: option<string>) => {
   let file = config->Option.getWithDefault(path)
+
   if !Fs.existsSync(file) {
+    Fs.mkdirSyncWith(Constants.configDir, Fs.mkdirOptions(~recursive=true, ()))
     write(file, {tags: [], commands: []})
   }
 }
