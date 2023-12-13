@@ -27,7 +27,7 @@ AVAILABLE COMMANDS:
 
 OPTIONS:
     -c                       Copy selected command to clipboard
-    --snippet [STRING]       snippet file (default is $HOME/.cnip.snippet.json)
+    --snippet [STRING]       snippet file (default is $HOME/./config/cnip/snippet.json)
     --input [STRING]         Reads the specified text file into the command list (e.g. $HISTFILE, etc.)
     --tag [STRING]           Specify the tag to be selected for initial display
     --select [STRING]        Display aliases and commands that match the specified text
@@ -49,7 +49,7 @@ OPTIONS:
 
 ```bash
 function cmd-select() {
-  if [ $READLINE_LINE = "" ]; then
+  if [ "$READLINE_LINE" = "" ]; then
     BUFFER=$(cnip --input $HISTFILE -s usage-count --query "$READLINE_LINE")
   else
     BUFFER=$(cnip --input $HISTFILE -s usage-count)
@@ -64,7 +64,7 @@ bind -x '"\C-r": cmd-select'
 
 ```bash
 function cmd-select() {
-  if [[ $LBUFFER == "" ]] then
+  if [[ "$LBUFFER" == "" ]] then
     BUFFER=$(cnip --input "$HISTFILE" -s "usage-count")
   else
     BUFFER=$(cnip --input "$HISTFILE" -s "usage-count" --query "$LBUFFER")
@@ -75,7 +75,7 @@ function cmd-select() {
 }
 
 function cmd-expand() {
-  if [[ $LBUFFER != "" ]] then
+  if [[ "$LBUFFER" != "" ]] then
     BUFFER=$(cnip --select "$LBUFFER")
   fi
 
