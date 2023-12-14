@@ -100,7 +100,11 @@ module History = {
     )
 
   let readAsync = (filepath: string, onRead: array<Command.t> => unit) =>
-    Modules.File.readAsync(filepath, text => text->parse->onRead)
+    if !Fs.existsSync(filepath) {
+      raise(Exception.NotFound(`"${filepath}"" could not be found.`))
+    } else {
+      Modules.File.readAsync(filepath, text => text->parse->onRead)
+    }
 }
 
 module Navi = {

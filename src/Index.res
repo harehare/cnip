@@ -25,36 +25,39 @@ function getStdin() {
 }
 `)
 
-Cli.parse(Process.process->Process.argv->Array.sliceToEnd(~start=2))
-->Result.map(command => {
-  let {waitUntilExit, clear} = InkEx.render(
-    <Main
-      cliCommand={command}
-      clear={_ => {
-        clearEventEmitter->ClearEventEmitter.emit(clearEvent, ())->ignore
-      }}
-    />,
-    ~exitOnCtrlC=true,
-    ~patchConsole=false,
-    ~stdout=stdout(),
-    ~stdin=stdin(),
-    (),
-  )
+try {
+  Cli.parse(Process.process->Process.argv->Array.sliceToEnd(~start=2))
+  ->Result.map(command => {
+    let {waitUntilExit, clear} = InkEx.render(
+      <Main
+        cliCommand={command}
+        clear={_ => {
+          clearEventEmitter->ClearEventEmitter.emit(clearEvent, ())->ignore
+        }}
+      />,
+      ~exitOnCtrlC=true,
+      ~patchConsole=false,
+      ~stdout=stdout(),
+      ~stdin=stdin(),
+      (),
+    )
+    clearEventEmitter
+    ->ClearEventEmitter.on(clearEvent, () => {
+      clear()
+    })
+    ->ignore
 
-  clearEventEmitter
-  ->ClearEventEmitter.on(clearEvent, () => {
-    clear()
+    waitUntilExit()
+    ->Promise.then(_ => {
+      Process.process->Process.exit()->ignore
+      Promise.resolve()
+    })
+    ->ignore
+  })
+  ->ResultEx.mapError(error => {
+    Modules.Console.error(error->Cli.errorToString)->Js.Console.error
   })
   ->ignore
-
-  waitUntilExit()
-  ->Promise.then(_ => {
-    Process.process->Process.exit()->ignore
-    Promise.resolve()
-  })
-  ->ignore
-})
-->ResultEx.mapError(error => {
-  Modules.Console.error(error->Cli.errorToString)->Js.Console.error
-})
-->ignore
+} catch {
+| Exception.NotFound(m) => Modules.Console.error(m)->Js.Console.error
+}

@@ -31,10 +31,7 @@ let decoder: Json.Decode.t<t> = {
   )
 }
 
-let path = `${Process.process
-  ->Process.env
-  ->Dict.get(Process.process->Process.platform == "win32" ? "USERPROFILE" : "HOME")
-  ->Option.getWithDefault("")}/.cnip.stat.json`
+let path = `${Constants.configDir}/stat.json`
 
 let readAsync = (onRead: array<t> => unit) => {
   Modules.File.readAsync(path, text => {
