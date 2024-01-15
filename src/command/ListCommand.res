@@ -10,23 +10,23 @@ let make = (
   let (isSnippetLoading, snippet) = CommandHook.useSnippet(snippet)
   let (isHistoryLoading, historyCommands) = CommandHook.useHistoryCommands(input)
   let (commandAndParams, setCommandAndParams) = React.useState(_ => None)
-  let commands = React.useMemo2(
-    () => Array.concat(snippet.commands, historyCommands->Option.getWithDefault([])),
+  let commands = React.useMemo(
+    () => Array.concat(snippet.commands, historyCommands->Option.getOr([])),
     (snippet.commands, historyCommands),
   )
   let (getStats, _) = CommandHook.useStats()
-  let commands = React.useMemo4(() => {
+  let commands = React.useMemo(() => {
     switch sort {
     | Some(LastUsed) =>
       commands->Js.Array2.sortInPlaceWith((a, b) => {
-        let v1 = a.id->getStats->Option.map(s => s.lastUsed)->Option.getWithDefault(0.0)
-        let v2 = b.id->getStats->Option.map(s => s.lastUsed)->Option.getWithDefault(0.0)
+        let v1 = a.id->getStats->Option.map(s => s.lastUsed)->Option.getOr(0.0)
+        let v2 = b.id->getStats->Option.map(s => s.lastUsed)->Option.getOr(0.0)
         v1 === v2 ? 0 : v2 > v1 ? 1 : -1
       })
     | Some(UsageCount) =>
       commands->Js.Array2.sortInPlaceWith((a, b) => {
-        let v1 = a.id->getStats->Option.map(s => s.usageCount)->Option.getWithDefault(0)
-        let v2 = b.id->getStats->Option.map(s => s.usageCount)->Option.getWithDefault(0)
+        let v1 = a.id->getStats->Option.map(s => s.usageCount)->Option.getOr(0)
+        let v2 = b.id->getStats->Option.map(s => s.usageCount)->Option.getOr(0)
         v1 === v2 ? 0 : v2 > v1 ? 1 : -1
       })
     | Some(Name) =>
@@ -37,7 +37,7 @@ let make = (
     }
   }, (sort, commands, historyCommands, getStats))
 
-  let onSelectCommand = React.useCallback0((command: Command.t) => {
+  let onSelectCommand = React.useCallback((command: Command.t) => {
     let params = command.command->Command.params
 
     if params->Array.length === 0 {
@@ -45,7 +45,7 @@ let make = (
     } else {
       setCommandAndParams(_ => Some((command, params)))
     }
-  })
+  }, [])
 
   {
     isSnippetLoading || isHistoryLoading

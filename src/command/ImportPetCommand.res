@@ -6,7 +6,7 @@ let make = (~snippet: option<string>, ~petConfig: string, ~onImport: array<Comma
   let handleMultiSelect = React.useCallback((commands: array<Command.t>) => {
     importCommand(commands)
     onImport(commands)
-  })
+  }, [importCommand, onImport])
 
   <CommandList
     commands={petCommands}

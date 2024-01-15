@@ -41,16 +41,16 @@ let write = (configPath, config: t) =>
 let path = `${Constants.configDir}/snippet.json`
 
 let create = (config: option<string>) => {
-  let file = config->Option.getWithDefault(path)
+  let file = config->Option.getOr(path)
 
   if !Fs.existsSync(file) {
-    Fs.mkdirSyncWith(Constants.configDir, Fs.mkdirOptions(~recursive=true, ()))
+    Fs.mkdirSyncWith(Constants.configDir, {recursive: true})
     write(file, {tags: [], commands: []})
   }
 }
 
 let isExists = (config: option<string>) => {
-  let file = config->Option.getWithDefault(path)
+  let file = config->Option.getOr(path)
   Fs.existsSync(file)
 }
 
@@ -65,8 +65,8 @@ module Pet = {
     let tags =
       petSnippets.snippets
       ->Array.map(snippet => (
-        snippet.tag->Option.getWithDefault([])->Array.get(0)->Option.getWithDefault(""),
-        snippet.tag->Option.getWithDefault([])->Array.get(0)->Option.getWithDefault(""),
+        snippet.tag->Option.getOr([])->Array.get(0)->Option.getOr(""),
+        snippet.tag->Option.getOr([])->Array.get(0)->Option.getOr(""),
       ))
       ->Js.Dict.fromArray
       ->Js.Dict.values
@@ -77,7 +77,7 @@ module Pet = {
         Command.create(
           ~command=snippet.command,
           ~description=snippet.description->String.trim === "" ? None : Some(snippet.description),
-          ~tag=snippet.tag->Option.getWithDefault([]),
+          ~tag=snippet.tag->Option.getOr([]),
           ~alias=None,
         )
       )
@@ -122,7 +122,7 @@ module Navi = {
           lines
           ->Array.get(0)
           ->Option.map(tag => tag->String.split(",")->Array.map(String.trim))
-          ->Option.getWithDefault([])
+          ->Option.getOr([])
 
         lines->Array.reduce([], (acc, line) => {
           let line = line->String.trim->String.replace("\\", "")
@@ -169,7 +169,7 @@ module Navi = {
                       : command,
                 ),
             )
-            ->Option.getWithDefault(acc)
+            ->Option.getOr(acc)
           } else if line !== "" {
             acc
             ->Array.get(acc->Array.length - 1)
@@ -184,7 +184,7 @@ module Navi = {
                       : command,
                 ),
             )
-            ->Option.getWithDefault(acc)
+            ->Option.getOr(acc)
           } else {
             acc
           }

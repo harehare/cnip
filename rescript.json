@@ -21,7 +21,9 @@
     "-open NodeJs",
     "-open Json"
   ],
-  "jsx": { "version": 3 },
+  "jsx": {
+    "version": 3
+  },
   "bs-dependencies": [
     "@rescript/core",
     "rescript-ink",
@@ -34,5 +36,8 @@
     "@rescript-ink/ink-link",
     "@rescript-ink/ink-spinner"
   ],
-  "bs-dev-dependencies": ["@glennsl/rescript-jest"]
+  "bs-dev-dependencies": [
+    "@glennsl/rescript-jest"
+  ],
+  "uncurried": false
 }

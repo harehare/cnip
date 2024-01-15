@@ -2,17 +2,17 @@ let getEnv = key => Process.process->Process.env->Dict.get(key)
 
 let isUnicodeSupported = () => {
   if Process.process->Process.platform !== "win32" {
-    getEnv("TERM")->Option.getWithDefault("") !== "linux"
+    getEnv("TERM")->Option.getOr("") !== "linux"
   } else {
     getEnv("CI")->Option.isSome ||
     getEnv("WT_SESSION")->Option.isSome ||
     getEnv("TERMINUS_SUBLIME")->Option.isSome ||
-    getEnv("ConEmuTask")->Option.getWithDefault("") === "{cmd::Cmder}" ||
-    getEnv("TERM_PROGRAM")->Option.getWithDefault("") === "Terminus-Sublime" ||
-    getEnv("TERM_PROGRAM")->Option.getWithDefault("") === "vscode" ||
-    getEnv("TERM")->Option.getWithDefault("") === "xterm-256color" ||
-    getEnv("TERM")->Option.getWithDefault("") === "alacritty" ||
-    getEnv("TERMINAL_EMULATOR")->Option.getWithDefault("") === "JetBrains-JediTerm"
+    getEnv("ConEmuTask")->Option.getOr("") === "{cmd::Cmder}" ||
+    getEnv("TERM_PROGRAM")->Option.getOr("") === "Terminus-Sublime" ||
+    getEnv("TERM_PROGRAM")->Option.getOr("") === "vscode" ||
+    getEnv("TERM")->Option.getOr("") === "xterm-256color" ||
+    getEnv("TERM")->Option.getOr("") === "alacritty" ||
+    getEnv("TERMINAL_EMULATOR")->Option.getOr("") === "JetBrains-JediTerm"
   }
 }
 

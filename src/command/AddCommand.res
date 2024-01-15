@@ -16,7 +16,7 @@ let make = (~snippet: option<string>, ~command: option<string>, ~onSubmit: Comma
     | None =>
       <CommandEditor
         onSubmit={command => {
-          saveCommand(addCommand(command))
+          saveCommand(addCommand(command))->ignore
           onSubmit(command)
         }}
       />

@@ -55,7 +55,7 @@ let commandToString = command => {
 
 let errorToString = error =>
   switch error {
-  | NotFound(s) => `${s->Option.getWithDefault("")} is not found`
+  | NotFound(s) => `${s->Option.getOr("")} is not found`
   | InvalidOption({name}) => `${name} is invalid option`
   }
 

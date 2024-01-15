@@ -3,7 +3,7 @@ open Ink
 @react.component
 let make = (~selected: bool, ~tag: string) => {
   let colors = CommandHook.useColor()
-  let tab = React.useMemo0(() => ` ${tag} `)
+  let tab = React.useMemo(() => ` ${tag} `, ())
 
   {
     <>

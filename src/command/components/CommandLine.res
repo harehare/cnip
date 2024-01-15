@@ -6,7 +6,7 @@ module Description = {
     <>
       <Spacer />
       <Text color wrap=#truncate>
-        {description->Option.map(d => ` ${d}`)->Option.getWithDefault("")->React.string}
+        {description->Option.map(d => ` ${d}`)->Option.getOr("")->React.string}
       </Text>
     </>
   }
@@ -21,14 +21,14 @@ let make = (
   ~showCheckBox: bool=false,
 ) => {
   let colors = CommandHook.useColor()
-  let displayCommand = React.useMemo0(() => {
+  let displayCommand = React.useMemo(() => {
     if command.command->String.length > column {
       `${command.command->String.slice(~start=0, ~end=column - 5)}…`
     } else {
       command.command
     }
-  })
-  let displayDescription = React.useMemo0(() => {
+  }, ())
+  let displayDescription = React.useMemo(() => {
     command.description->Option.flatMap(d => {
       let len = column - command.command->String.length
 
@@ -40,7 +40,7 @@ let make = (
         Some(d)
       }
     })
-  })
+  }, ())
 
   <Box>
     {current

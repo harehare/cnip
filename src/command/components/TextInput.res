@@ -10,10 +10,10 @@ let make = (
   ~onChange: string => unit,
   ~onSubmit: option<string => unit>=?,
 ) => {
-  let (text, setText) = React.useState(_ => default->Option.getWithDefault(""))
+  let (text, setText) = React.useState(_ => default->Option.getOr(""))
 
   <Box>
-    <Prompt prompt={prompt->Option.getWithDefault("")} error={error} />
+    <Prompt prompt={prompt->Option.getOr("")} error={error} />
     <TextInput
       value={text}
       highlightPastedText={true}
@@ -21,7 +21,7 @@ let make = (
         setText(_ => s)
         onChange(s)
       }}
-      onSubmit={onSubmit->Option.getWithDefault(_ => ())}
+      onSubmit={onSubmit->Option.getOr(_ => ())}
     />
   </Box>
 }

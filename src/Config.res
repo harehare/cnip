@@ -83,7 +83,7 @@ module Sync = {
       download({gist_id: c.gistId})->Promise.then(gist => {
         let gistSnippet = switch gist.data.files->Js.Dict.values->Array.get(0) {
         | Some(gist) =>
-          Decode.decodeString(gist.content, Snippet.decoder)->Result.getWithDefault({
+          Decode.decodeString(gist.content, Snippet.decoder)->Result.getOr({
             tags: [],
             commands: [],
           })
@@ -95,13 +95,9 @@ module Sync = {
           : None
         let remoteDate = gist.data.updated_at->Date.fromString->DateEx.toString
 
-        if (
-          localDate->Option.map(localDate => localDate > remoteDate)->Option.getWithDefault(false)
-        ) {
+        if localDate->Option.map(localDate => localDate > remoteDate)->Option.getOr(false) {
           update(snippet, c.gistId)->Promise.then(gist => Promise.resolve((Upload, gist)))
-        } else if (
-          localDate->Option.map(localDate => localDate < remoteDate)->Option.getWithDefault(true)
-        ) {
+        } else if localDate->Option.map(localDate => localDate < remoteDate)->Option.getOr(true) {
           Snippet.write(snippetPath, gistSnippet)->ignore
           Promise.resolve((Download, gist))
         } else {

@@ -13,9 +13,7 @@ type editState = {
 let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => {
   let (current, setCurrent) = React.useState(_ => Command)
   let (command, setCommand) = React.useState(_ =>
-    editCommand->Option.getWithDefault(
-      Command.create(~command="", ~description=None, ~tag=[], ~alias=None),
-    )
+    editCommand->Option.getOr(Command.create(~command="", ~description=None, ~tag=[], ~alias=None))
   )
   let (editState, setEditState) = React.useState(_ => {
     command: false,
@@ -49,7 +47,7 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
     }
   }, ())
 
-  React.useEffect2(() => {
+  React.useEffect(() => {
     if current === Complete {
       onSubmit(command)
     }
@@ -65,7 +63,7 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
             setEditState(_ => {...editState, command: true})
             setCommand(_ => {...command, command: c})
           }}
-          onSubmit={c => {
+          onSubmit={_ => {
             setCurrent(_ => Description)
           }}
         />
@@ -79,12 +77,12 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
     {current === Description
       ? <TextInput
           prompt="Description"
-          default={command.description->Option.getWithDefault("")}
+          default={command.description->Option.getOr("")}
           onChange={description => {
             setEditState(_ => {...editState, description: true})
             setCommand(_ => {...command, description: Some(description)})
           }}
-          onSubmit={description => {
+          onSubmit={_ => {
             setCurrent(_ => Tag)
           }}
         />
@@ -93,13 +91,13 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
         prompt="Description"
         color=colors.selected
         icon={Figures.symbol.success}
-        text={command.description->Option.getWithDefault("")}
+        text={command.description->Option.getOr("")}
       />
       : <ReadOnlyTextInput
           prompt="Description"
           color=#gray
           icon={Figures.symbol.pointer}
-          text={command.description->Option.getWithDefault("")}
+          text={command.description->Option.getOr("")}
         />}
     {current === Tag
       ? <TextInput
@@ -109,7 +107,7 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
             setEditState(_ => {...editState, tag: true})
             setCommand(_ => {...command, tag: tag->String.split(",")->Array.map(String.trim)})
           }}
-          onSubmit={tag => {
+          onSubmit={_ => {
             setCurrent(_ => Alias)
           }}
         />
@@ -126,7 +124,7 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
     {current === Alias
       ? <TextInput
           prompt="Alias"
-          default={command.alias->Option.getWithDefault("")}
+          default={command.alias->Option.getOr("")}
           onChange={alias => {
             setCommand(_ => {
               ...command,
@@ -134,7 +132,7 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
             })
             setEditState(_ => {...editState, alias: true})
           }}
-          onSubmit={tag => {
+          onSubmit={_ => {
             setCurrent(_ => Complete)
           }}
         />
@@ -143,13 +141,13 @@ let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => 
         prompt="Alias"
         color=colors.selected
         icon={Figures.symbol.success}
-        text={command.alias->Option.getWithDefault("")}
+        text={command.alias->Option.getOr("")}
       />
       : <ReadOnlyTextInput
           prompt="Alias"
           color=#gray
           icon={Figures.symbol.pointer}
-          text={command.alias->Option.getWithDefault("")}
+          text={command.alias->Option.getOr("")}
         />}
   </Box>
 }

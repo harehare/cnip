@@ -1,7 +1,12 @@
 type fuzzyOptions
 
 @obj
-external fuzzyOptions: (~normalizeWhitespace: bool=?, unit) => fuzzyOptions = ""
+external fuzzyOptions: (
+  ~normalizeWhitespace: bool=?,
+  ~useSeparatedUnicode: bool=?,
+  ~useDamerau: bool=?,
+  unit,
+) => fuzzyOptions = ""
 
 @module("fast-fuzzy") external fuzzy: (string, string, fuzzyOptions) => float = "fuzzy"
 
@@ -44,16 +49,20 @@ let filledParams = (t, params) => {
 }
 
 let match = (command: t, text: string) =>
-  fuzzy(text, command.command, fuzzyOptions(~normalizeWhitespace=false, ()))
+  fuzzy(
+    text,
+    command.command,
+    fuzzyOptions(~normalizeWhitespace=false, ~useSeparatedUnicode=true, ~useDamerau=true, ()),
+  )
 
 let encode = (c: t): Json.value => {
   open Json.Encode
   object([
     ("id", string(c.id)),
     ("command", string(c.command)),
-    ("description", c.description->Option.map(string)->Option.getWithDefault(Json.Encode.null)),
+    ("description", c.description->Option.map(string)->Option.getOr(Json.Encode.null)),
     ("tag", array(c.tag, string)),
-    ("alias", c.alias->Option.map(string)->Option.getWithDefault(Json.Encode.null)),
+    ("alias", c.alias->Option.map(string)->Option.getOr(Json.Encode.null)),
   ])
 }
 

@@ -24,7 +24,7 @@ module TipDescription = {
 
 @react.component
 let make = _ => {
-  let (numColumns, _) = React.useMemo0(() => Dimension.windowSize())
+  let (numColumns, _) = React.useMemo(() => Dimension.windowSize(), [])
   <Box width=#length(numColumns)>
     <TextView> {" Tips: "->React.string} </TextView>
     <TipKey text={"tab, shift+tab"} />

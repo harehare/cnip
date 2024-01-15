@@ -6,10 +6,10 @@ let make = (~snippet: option<string>, ~histfile: string, ~onImport: array<Comman
   let handleMultiSelect = React.useCallback((commands: array<Command.t>) => {
     importCommand(commands)
     onImport(commands)
-  })
+  }, [importCommand, onImport])
 
   <CommandList
-    commands={historyCommands->Option.getWithDefault([])}
+    commands={historyCommands->Option.getOr([])}
     multiSelect={true}
     showTabs={false}
     query={None}

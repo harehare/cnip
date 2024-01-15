@@ -18,22 +18,22 @@ let make = (
 ) => {
   let select = CommandHook.useSelectCommand()
 
-  let (searchText, setSearchText) = React.useState(_ => query->Option.getWithDefault(""))
+  let (searchText, setSearchText) = React.useState(_ => query->Option.getOr(""))
   let (line, setLine) = React.useState(_ => 0)
   let (selectedCommands, setSelectedCommands) = React.useState(_ => Js.Dict.empty())
   let (selectedTab, setSelectedTab) = React.useState(_ => 0)
   let (displayStart, setDisplayStart) = React.useState(_ => 0)
 
-  let (numColumns, numRows) = React.useMemo0(() => Dimension.windowSize())
-  let selectableTags = React.useMemo1(
+  let (numColumns, numRows) = React.useMemo(() => Dimension.windowSize(), [])
+  let selectableTags = React.useMemo(
     () =>
-      tags->Option.getWithDefault([])->Array.length === 0
+      tags->Option.getOr([])->Array.length === 0
         ? []
-        : Array.concat(["All"], tags->Option.getWithDefault([])),
+        : Array.concat(["All"], tags->Option.getOr([])),
     [tags],
   )
 
-  React.useEffect0(_ => {
+  React.useEffect(_ => {
     defaultTag
     ->Option.map(t => {
       let index = selectableTags->Array.indexOf(t)
@@ -44,24 +44,22 @@ let make = (
     })
     ->ignore
     None
-  })
+  }, [defaultTag])
 
-  let selectedTabCommands = React.useMemo3(
+  let selectedTabCommands = React.useMemo(
     () =>
       commands->Array.filter(command =>
         selectableTags->Array.length === 0 ||
-        selectableTags->Array.get(selectedTab)->Option.getWithDefault("All") === "All" ||
-        command.tag->Array.includes(
-          selectableTags->Array.get(selectedTab)->Option.getWithDefault("All"),
-        )
+        selectableTags->Array.get(selectedTab)->Option.getOr("All") === "All" ||
+        command.tag->Array.includes(selectableTags->Array.get(selectedTab)->Option.getOr("All"))
       ),
     (commands, selectableTags, selectedTab),
   )
-  let tabGroupCount = React.useMemo1(
+  let tabGroupCount = React.useMemo(
     () => selectableTags->Array.length / tabCount + 1,
     [selectableTags],
   )
-  let filteredCommands = React.useMemo2(() =>
+  let filteredCommands = React.useMemo(() =>
     selectedTabCommands
     ->Array.filterMap(command => {
       let score = command->Command.match(searchText)
@@ -73,22 +71,24 @@ let make = (
     ->Array.map(Tuple.second)
   , (selectedTabCommands, searchText))
 
-  let maxRows = React.useMemo0(_ =>
-    displayRows->Option.getWithDefault(numRows->Option.getWithDefault(0)) -
-      (7 +
-      tabGroupCount -
-      (canSearch ? 1 : 0)) < 0
-      ? 10
-      : displayRows->Option.getWithDefault(numRows->Option.getWithDefault(0)) -
-          (7 +
-          tabGroupCount -
-          (canSearch ? 1 : 0))
+  let maxRows = React.useMemo(
+    _ =>
+      displayRows->Option.getOr(numRows->Option.getOr(0)) -
+        (7 +
+        tabGroupCount -
+        (canSearch ? 1 : 0)) < 0
+        ? 10
+        : displayRows->Option.getOr(numRows->Option.getOr(0)) -
+            (7 +
+            tabGroupCount -
+            (canSearch ? 1 : 0)),
+    (),
   )
-  let displayCommands = React.useMemo2(
+  let displayCommands = React.useMemo(
     _ => filteredCommands->Array.slice(~start=displayStart, ~end=displayStart + maxRows),
     (filteredCommands, displayStart),
   )
-  let commandCount = React.useMemo1(() => filteredCommands->Array.length - 1, [filteredCommands])
+  let commandCount = React.useMemo(() => filteredCommands->Array.length - 1, [filteredCommands])
 
   useInput((input, key) => {
     if key.upArrow {
@@ -168,44 +168,40 @@ let make = (
     }
   }, ())
 
-  let tabs = React.useMemo3(
-    () =>
-      showTabs
-        ? Belt.Array.range(0, tabGroupCount - 1)
-          ->Array.map(group =>
-            <Box key={group->Int.toString} width=#percent(100.0)>
-              {selectableTags
-              ->Array.slice(~start=group * tabCount, ~end=group * tabCount + tabCount)
-              ->Array.mapWithIndex(
-                (tag, i) =>
-                  <Tab key={tag} tag={tag} selected={group * tabCount + i === selectedTab} />,
-              )
-              ->React.array}
-            </Box>
-          )
-          ->React.array
-        : React.null,
-    (showTabs, selectableTags, selectedTab),
-  )
+  let tabs = React.useMemo(() =>
+    showTabs
+      ? Belt.Array.range(0, tabGroupCount - 1)
+        ->Array.map(group =>
+          <Box key={group->Int.toString} width=#percent(100.0)>
+            {selectableTags
+            ->Array.slice(~start=group * tabCount, ~end=group * tabCount + tabCount)
+            ->Array.mapWithIndex(
+              (tag, i) =>
+                <Tab key={tag} tag={tag} selected={group * tabCount + i === selectedTab} />,
+            )
+            ->React.array}
+          </Box>
+        )
+        ->React.array
+      : React.null
+  , (showTabs, selectableTags, selectedTab))
 
-  let lines = React.useMemo5(
-    () =>
-      displayCommands
-      ->Array.mapWithIndex((command, i) =>
-        <CommandLine
-          key={command.id}
-          column={numColumns}
-          command={command}
-          current={displayStart + i === line}
-          selected={selectedCommands->Dict.get(command.id)->Option.isSome}
-          showCheckBox={multiSelect}
-        />
-      )
-      ->React.array,
-    (selectedCommands, displayCommands, line, multiSelect, displayStart),
-  )
+  let lines = React.useMemo(() =>
+    displayCommands
+    ->Array.mapWithIndex((command, i) =>
+      <CommandLine
+        key={command.id}
+        column={numColumns}
+        command={command}
+        current={displayStart + i === line}
+        selected={selectedCommands->Dict.get(command.id)->Option.isSome}
+        showCheckBox={multiSelect}
+      />
+    )
+    ->React.array
+  , (selectedCommands, displayCommands, line, multiSelect, displayStart))
 
-  React.useEffect1(() => {
+  React.useEffect(() => {
     setLine(_ => 0)
     None
   }, [searchText])

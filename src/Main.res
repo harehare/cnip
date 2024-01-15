@@ -11,16 +11,16 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
   let exit = React.useCallback(() => {
     clear()
     app.exit(None)
-  })
-  let showTips = React.useMemo0(_ =>
-    Env.showTips()->Option.map(v => v === "true" || v === "1")->Option.getWithDefault(true) &&
+  }, (app, clear))
+  let showTips = React.useMemo(_ =>
+    Env.showTips()->Option.map(v => v === "true" || v === "1")->Option.getOr(true) &&
       switch cliCommand {
       | Sync(_) => false
       | List({select: Some(_)}) => false
       | Help(_) => false
       | _ => true
       }
-  )
+  , [])
 
   <>
     {switch cliCommand {

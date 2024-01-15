@@ -3,10 +3,10 @@ let make = (~snippet: option<string>, ~select: string, ~onSelect: option<Command
   let (isSnippetLoading, snippet) = CommandHook.useSnippet(snippet)
   let (commandAndParams, setCommandAndParams) = React.useState(_ => None)
 
-  React.useEffect2(() => {
+  React.useEffect(() => {
     if !isSnippetLoading {
       switch snippet.commands->Array.find(command => {
-        command.alias->Option.getWithDefault("") === select || command.command === select
+        command.alias->Option.getOr("") === select || command.command === select
       }) {
       | Some(command) => {
           let params = command.command->Command.params

@@ -6,10 +6,10 @@ let make = (~snippet: option<string>, ~config: string, ~onImport: array<Command.
   let handleMultiSelect = React.useCallback((commands: array<Command.t>) => {
     importCommand(commands)
     onImport(commands)
-  })
+  }, [importCommand, onImport])
 
   <CommandList
-    commands={naviCommands->Option.getWithDefault([])}
+    commands={naviCommands->Option.getOr([])}
     multiSelect={true}
     showTabs={false}
     query={None}

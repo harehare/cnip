@@ -3,8 +3,8 @@ open Modules
 
 @react.component
 let make = (~children=?) => {
-  let (numColumns, numRows) = React.useMemo0(() => Dimension.windowSize())
-  let rows = React.useMemo0(_ => numRows - 2)
+  let (numColumns, numRows) = React.useMemo(() => Dimension.windowSize(), [])
+  let rows = React.useMemo(_ => numRows - 2, ())
   let colors = CommandHook.useColor()
 
   <Box
@@ -13,6 +13,6 @@ let make = (~children=?) => {
     height=#length(rows)
     borderStyle=#single
     borderColor=colors.border>
-    {children->Option.getWithDefault(React.null)}
+    {children->Option.getOr(React.null)}
   </Box>
 }

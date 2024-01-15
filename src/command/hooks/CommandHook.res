@@ -10,7 +10,7 @@ let extractTags = (commands: array<Command.t>) =>
 let useStdout = () => {
   let write = React.useCallback(text => {
     Process.process->Process.stdout->Stream.writeWith(`${text}\n`->Buffer.fromString, ())->ignore
-  })
+  }, [])
 
   write
 }
@@ -30,7 +30,7 @@ type colors = {
 }
 
 let useColor = () => {
-  let colors = React.useMemo0(() => {
+  let colors = React.useMemo(() => {
     {
       highlight: Color.highlight(),
       currentLine: Color.currentLine(),
@@ -44,7 +44,7 @@ let useColor = () => {
       border: Color.border(),
       error: Color.error(),
     }
-  })
+  }, ())
 
   colors
 }
@@ -53,9 +53,9 @@ let useSnippet = (snippet: option<string>) => {
   let (isLoading, setIsLoading) = React.useState(_ => true)
   let (readedSnippet, setReadedSnippet) = React.useState(_ => None)
 
-  React.useEffect0(() => {
+  React.useEffect(() => {
     if Snippet.isExists(snippet) {
-      Snippet.readAsync(snippet->Option.getWithDefault(Snippet.path), c => {
+      Snippet.readAsync(snippet->Option.getOr(Snippet.path), c => {
         setReadedSnippet(_ => Some(c))
         setIsLoading(_ => false)
       })->ignore
@@ -65,11 +65,11 @@ let useSnippet = (snippet: option<string>) => {
     }
 
     None
-  })
+  }, [snippet])
 
   (
     isLoading,
-    readedSnippet->Option.getWithDefault({
+    readedSnippet->Option.getOr({
       tags: [],
       commands: [],
     }),
@@ -77,7 +77,7 @@ let useSnippet = (snippet: option<string>) => {
 }
 
 let usePetCommands = (snippet: option<string>) => {
-  let commands = React.useMemo1(() => {
+  let commands = React.useMemo(() => {
     switch snippet {
     | Some(petConfig) => {
         let snippet = Snippet.Pet.petSnipptesToConfig(Snippet.Pet.readFromPetSnippets(petConfig))
@@ -94,7 +94,7 @@ let useNaviCommands = (config: option<string>) => {
   let (isLoading, setIsLoading) = React.useState(_ => false)
   let (commands, setCommands) = React.useState(_ => None)
 
-  React.useEffect0(() => {
+  React.useEffect(() => {
     config
     ->Option.map(f => {
       setIsLoading(_ => true)
@@ -108,7 +108,7 @@ let useNaviCommands = (config: option<string>) => {
     })
     ->ignore
     None
-  })
+  }, [config])
 
   (isLoading, commands)
 }
@@ -117,7 +117,7 @@ let useHistoryCommands = (histfile: option<string>) => {
   let (isLoading, setIsLoading) = React.useState(_ => false)
   let (histories, setHistories) = React.useState(_ => None)
 
-  React.useEffect0(() => {
+  React.useEffect(() => {
     histfile
     ->Option.map(f => {
       setIsLoading(_ => true)
@@ -131,25 +131,27 @@ let useHistoryCommands = (histfile: option<string>) => {
     })
     ->ignore
     None
-  })
+  }, [histfile])
 
   (isLoading, histories)
 }
 
 let useStats = () => {
   let (stats, setStats) = React.useState(_ => None)
-  React.useEffect0(() => {
+  React.useEffect(() => {
     Stat.create()
     Stat.readAsync(s => setStats(_ => Some(s->Stat.statByHash)))->ignore
     None
-  })
+  }, [])
 
   (
-    React.useCallback((command: string) =>
-      stats->Option.flatMap(s => s->Js.Dict.get(command->Stat.commandHash))
+    React.useCallback(
+      (command: string) => stats->Option.flatMap(s => s->Js.Dict.get(command->Stat.commandHash)),
+      [stats],
     ),
-    React.useCallback((command: string) =>
-      stats->Option.map(s => Stat.use(s->Js.Dict.values, command))
+    React.useCallback(
+      (command: string) => stats->Option.map(s => Stat.use(s->Js.Dict.values, command)),
+      [stats],
     ),
   )
 }
@@ -157,20 +159,20 @@ let useStats = () => {
 let useSelectCommand = () => {
   let (_, updateStats) = useStats()
 
-  React.useCallback((command: Command.t) => updateStats(command.id))
+  React.useCallback((command: Command.t) => updateStats(command.id), [updateStats])
 }
 
 let useSaveCommands = (snippet: option<string>) => {
   let saveCommands = React.useCallback((commands: array<Command.t>) => {
     Snippet.create(snippet)
     Snippet.write(
-      snippet->Option.getWithDefault(Snippet.path),
+      snippet->Option.getOr(Snippet.path),
       {
         tags: commands->extractTags,
         commands,
       },
     )
-  })
+  }, [snippet])
 
   saveCommands
 }
@@ -182,13 +184,14 @@ let useImportCommand = (snippet: option<string>) => {
   React.useCallback((addCommands: array<Command.t>) => {
     let newCommands = Array.concat(addCommands, snippet.commands)
     saveCommands(newCommands)
-  })
+  }, (saveCommands, snippet))
 }
 
 let useAddCommand = (snippet: option<string>) => {
   let (_, snippet) = useSnippet(snippet)
-  let addCommand = React.useCallback((command: Command.t) =>
-    [command]->Array.concat(snippet.commands)
+  let addCommand = React.useCallback(
+    (command: Command.t) => [command]->Array.concat(snippet.commands),
+    [snippet],
   )
 
   addCommand
@@ -196,8 +199,9 @@ let useAddCommand = (snippet: option<string>) => {
 
 let useEditCommand = (snippet: option<string>) => {
   let (_, snippet) = useSnippet(snippet)
-  let editCommand = React.useCallback((command: Command.t) =>
-    snippet.commands->Array.map(c => c.id === command.id ? command : c)
+  let editCommand = React.useCallback(
+    (command: Command.t) => snippet.commands->Array.map(c => c.id === command.id ? command : c),
+    [snippet],
   )
 
   editCommand
@@ -208,7 +212,7 @@ let useDeleteCommands = (snippet: option<string>) => {
   let deleteCommand = React.useCallback((deleteCommands: array<Command.t>) => {
     let deleteCommandIds = deleteCommands->Array.map(c => c.id)->Set.fromArray
     snippet.commands->Array.filter(c => !(deleteCommandIds->Set.has(c.id)))
-  })
+  }, [snippet])
 
   deleteCommand
 }
@@ -219,7 +223,7 @@ let useSyncCommands = (snippetPath: option<string>, ~gistId: option<string>) => 
   let (action, setAction) = React.useState(_ => None)
   let (error, setError) = React.useState(_ => None)
 
-  React.useEffect1(() => {
+  React.useEffect(() => {
     if !isSnippetLoading {
       Config.Sync.sync(
         gistId
@@ -227,14 +231,14 @@ let useSyncCommands = (snippetPath: option<string>, ~gistId: option<string>) => 
           let config: Config.t = {gistId: g}
           Some(config)
         })
-        ->Option.getWithDefault(
+        ->Option.getOr(
           switch Config.read() {
           | Ok(config) => Some(config)
           | Error(_) => None
           },
         ),
         snippets,
-        snippetPath->Option.getWithDefault(Snippet.path),
+        snippetPath->Option.getOr(Snippet.path),
       )
       ->Promise.then(((action, gist)) => {
         setSyncedGistId(_ => Some(gist.data.id))
@@ -250,11 +254,11 @@ let useSyncCommands = (snippetPath: option<string>, ~gistId: option<string>) => 
               `Error occurred: ${e
                 ->Exn.asJsExn
                 ->Option.flatMap(e => e->Exn.message)
-                ->Option.getWithDefault("")}`
+                ->Option.getOr("")}`
             },
           ),
         )
-        Promise.resolve(error->Option.getWithDefault(""))
+        Promise.resolve(error->Option.getOr(""))
       })
       ->ignore
     }
