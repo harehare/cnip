@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^20.0.2",
-    "clipboardy": "^2.3.0",
+    "clipboardy": "^4.0.0",
     "fast-fuzzy": "^1.12.0",
     "ink-text-input": "^4.0.3",
     "minimist": "^1.2.8",
