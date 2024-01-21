@@ -23,7 +23,8 @@
     "dev": "rescript build -w",
     "format": "rescript format **/*.res",
     "build": "rescript && node build.js && terser --compress --mangle -- dist/index.js > dist/index.js2 && mv dist/index.js2 dist/index.js",
-    "test": "rescript && jest"
+    "test": "rescript && jest",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.2",
