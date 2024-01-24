@@ -124,7 +124,26 @@ let useHistoryCommands = (histfile: option<string>) => {
       Snippet.History.readAsync(
         f,
         commands => {
-          setHistories(_ => Some(commands))
+          setHistories(
+            _ => Some(
+              commands->Array.map(
+                command => {
+                  switch Js.Re.fromString(": [0-9]{10}:[0-9]+;(.*)")->Js.Re.exec_(command.command) {
+                  | Some(r) =>
+                    Js.Re.captures(r)[1]
+                    ->Option.map(
+                      v => {
+                        ...command,
+                        command: v->Js.Nullable.toOption->Option.getOr(command.command),
+                      },
+                    )
+                    ->Option.getOr(command)
+                  | None => command
+                  }
+                },
+              ),
+            ),
+          )
           setIsLoading(_ => false)
         },
       )->ignore
