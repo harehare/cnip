@@ -61,3 +61,12 @@ try {
 } catch {
 | Exception.NotFound(m) => Modules.Console.error(m)->Js.Console.error
 }
+
+%%raw(`
+const updateNotifier = require('update-notifier');
+const packageJson = require('../package.json');
+
+console.log(packageJson);
+
+updateNotifier({pkg: packageJson}).notify();
+`)
