@@ -33,7 +33,6 @@
     "ink-text-input": "^4.0.3",
     "minimist": "^1.2.8",
     "toml": "^3.0.0",
-    "update-notifier": "^5.1.0",
     "uuid": "^9.0.1"
   },
   "files": [
@@ -41,13 +40,13 @@
     "bin",
     "images"
   ],
-  "packageManager": "npm@10.4.0",
+  "packageManager": "npm@9.2.0",
   "devDependencies": {
     "@glennsl/rescript-jest": "^0.10.0",
     "@rescript-ink/ink-link": "^3.0.0",
     "@rescript-ink/ink-spinner": "^3.0.0",
     "@rescript-ink/ink-text-input": "^3.0.0",
-    "@rescript/core": "^0.7.0",
+    "@rescript/core": "^1.0.0",
     "@rescript/react": "^0.12.1",
     "esbuild": "^0.20.0",
     "react": "^18.2.0",
