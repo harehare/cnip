@@ -90,9 +90,10 @@ module History = {
   let parse = (text: string) =>
     text
     ->String.split("\n")
+    ->Array.map(line => line->String.trim)
     ->Set.fromArray
     ->Set.values
-    ->Core__Iterator.toArray
+    ->Array.fromIterator
     ->Array.filterMap(line =>
       line === ""
         ? None
