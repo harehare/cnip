@@ -52,7 +52,7 @@ let match = (command: t, text: string) =>
   fuzzy(
     text,
     command.command,
-    fuzzyOptions(~normalizeWhitespace=false, ~useSeparatedUnicode=true, ~useDamerau=false, ()),
+    fuzzyOptions(~normalizeWhitespace=false, ~useSeparatedUnicode=true, ~useDamerau=true, ()),
   )
 
 let encode = (c: t): Json.value => {
