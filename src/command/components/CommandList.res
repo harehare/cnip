@@ -113,7 +113,7 @@ let make = (
         setLine(_ => nextLine)
         setDisplayStart(_ => Js.Math.max_int(0, nextLine - maxRows + 1))
       }
-    } else if showTabs && key.shift && key.tab {
+    } else if showTabs && key.leftArrow {
       let nextTab = Js.Math.max_int(0, selectedTab - 1)
       setLine(_ => 0)
       setSelectedTab(_ =>
@@ -121,7 +121,7 @@ let make = (
           ? selectableTags->Array.length - 1
           : Js.Math.max_int(0, selectedTab - 1)
       )
-    } else if showTabs && key.tab {
+    } else if showTabs && key.rightArrow {
       let nextTab = Js.Math.min_int(selectedTab + 1, selectableTags->Array.length - 1)
       setSelectedTab(_ => selectedTab === nextTab ? 0 : nextTab)
       setLine(_ => 0)

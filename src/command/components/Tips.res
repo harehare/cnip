@@ -27,7 +27,7 @@ let make = _ => {
   let (numColumns, _) = React.useMemo(() => Dimension.windowSize(), [])
   <Box width=#length(numColumns)>
     <TextView> {" Tips: "->React.string} </TextView>
-    <TipKey text={"tab, shift+tab"} />
+    <TipKey text={`<${Figures.symbol.left}${Figures.symbol.right}>`} />
     <TipDescription text={"Move tab."} />
     <TipKey text={"esc"} />
     <TipDescription text={"Select all/Unselect all."} />
