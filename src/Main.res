@@ -2,7 +2,7 @@ open Ink
 
 @module("clipboardy") external writeToClipboard: string => unit = "writeSync"
 
-let version = "0.1.16"
+let version = "0.1.18"
 
 @react.component
 let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
