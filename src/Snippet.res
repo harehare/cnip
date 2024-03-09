@@ -79,6 +79,7 @@ module Pet = {
           ~description=snippet.description->String.trim === "" ? None : Some(snippet.description),
           ~tag=snippet.tag->Option.getOr([]),
           ~alias=None,
+          ~commandType=Pet,
         )
       )
 
@@ -97,7 +98,16 @@ module History = {
     ->Array.filterMap(line =>
       line === ""
         ? None
-        : Some(Command.create(~command=line, ~description=None, ~tag=[], ~alias=None))
+        : Some(
+            Command.createWithId(
+              ~id=line,
+              ~command=line,
+              ~description=None,
+              ~tag=[],
+              ~alias=None,
+              ~commandType=History,
+            ),
+          )
     )
 
   let readAsync = (filepath: string, onRead: array<Command.t> => unit) =>
@@ -142,6 +152,7 @@ module Navi = {
                 ~description=None,
                 ~tag=tags,
                 ~alias=None,
+                ~commandType=Navi,
               ),
             ])
           } else if line->String.startsWith("#") {
@@ -153,6 +164,7 @@ module Navi = {
                 ~description=description === "" ? None : Some(description),
                 ~tag=tags,
                 ~alias=None,
+                ~commandType=Navi,
               ),
             ])
           } else if line->String.startsWith("|") {

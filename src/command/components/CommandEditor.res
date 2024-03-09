@@ -13,7 +13,9 @@ type editState = {
 let make = (~editCommand: option<Command.t>=?, ~onSubmit: Command.t => unit) => {
   let (current, setCurrent) = React.useState(_ => Command)
   let (command, setCommand) = React.useState(_ =>
-    editCommand->Option.getOr(Command.create(~command="", ~description=None, ~tag=[], ~alias=None))
+    editCommand->Option.getOr(
+      Command.create(~command="", ~description=None, ~tag=[], ~alias=None, ~commandType=Snippet),
+    )
   )
   let (editState, setEditState) = React.useState(_ => {
     command: false,

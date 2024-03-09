@@ -26,14 +26,22 @@ $ test2
             ~description=Some("test"),
             ~tag=["tag1", "tag2"],
             ~alias=None,
+            ~commandType=Snippet,
           ),
           Command.create(
             ~command="bin/rails server --port=3001",
             ~description=Some("launch Rails server"),
             ~tag=["tag1", "tag2"],
             ~alias=None,
+            ~commandType=Snippet,
           ),
-          Command.create(~command="test2", ~description=None, ~tag=["tag1", "tag2"], ~alias=None),
+          Command.create(
+            ~command="test2",
+            ~description=None,
+            ~tag=["tag1", "tag2"],
+            ~alias=None,
+            ~commandType=Snippet,
+          ),
         ]->Array.map(c => {...c, id: ""}),
       )
     )
