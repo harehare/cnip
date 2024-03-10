@@ -35,7 +35,7 @@ module Sync = {
   type action = Download | Upload | NoOp
 
   let download = params =>
-    Octokit.createClient({auth: Env.githubAccessToken()})
+    Octokit.createClient({auth: Env.githubAccessToken})
     ->Octokit.rest
     ->Octokit.Rest.gists
     ->Octokit.Rest.Gist.get(params)
@@ -50,7 +50,7 @@ module Sync = {
       {content: snippet->Snippet.encode->Encode.encode(~indentLevel=2)},
     )
 
-    Octokit.createClient({auth: Env.githubAccessToken()})
+    Octokit.createClient({auth: Env.githubAccessToken})
     ->Octokit.rest
     ->Octokit.Rest.gists
     ->Octokit.Rest.Gist.create({
@@ -66,7 +66,7 @@ module Sync = {
       {content: snippet->Snippet.encode->Encode.encode(~indentLevel=2)},
     )
 
-    Octokit.createClient({auth: Env.githubAccessToken()})
+    Octokit.createClient({auth: Env.githubAccessToken})
     ->Octokit.rest
     ->Octokit.Rest.gists
     ->Octokit.Rest.Gist.update({

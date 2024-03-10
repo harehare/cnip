@@ -7,7 +7,13 @@ let make = (~snippet: option<string>, ~command: option<string>, ~onSubmit: Comma
     {switch command {
     | Some(command) =>
       <CommandEditor
-        editCommand={Command.create(~command, ~description=None, ~tag=[], ~alias=None)}
+        editCommand={Command.create(
+          ~command,
+          ~description=None,
+          ~tag=[],
+          ~alias=None,
+          ~commandType=Snippet,
+        )}
         onSubmit={command => {
           saveCommand(addCommand(command))
           onSubmit(command)

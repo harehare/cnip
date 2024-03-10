@@ -2,7 +2,7 @@
 
 cnip is a simple command-line snippet management tool.
 
-![image](./images/cnip.png)
+![image](./images/cnip.jpg)
 
 ## Install
 
@@ -98,6 +98,8 @@ Create an environment variable name `$CNIP_GITHUB_GIST_ACCESS_TOKEN` and set the
 
 ## Customization
 
+You can customize the display by setting the following environment variables.
+
 ```bash
 CNIP_HIGHLIGHT_COLOR="#FFBC00"
 CNIP_CURRENT_LINE_COLOR="#FFBC00"
@@ -110,6 +112,7 @@ CNIP_POINTER_COLOR="#6E4BEC"
 CNIP_BORDER_COLOR="#ADADAD"
 CNIP_DESCRIPTION_COLOR="#3BBFBF"
 CNIP_CURRENT_LINE_COLOR="#6E4BEC"
+CNIP_SHOW_ICONS="1"
 ```
 
 ## Build

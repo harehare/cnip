@@ -2,7 +2,7 @@ open Ink
 
 @module("clipboardy") external writeToClipboard: string => unit = "writeSync"
 
-let version = "0.1.18"
+let version = "0.1.19"
 
 @react.component
 let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
@@ -13,7 +13,7 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
     app.exit(None)
   }, (app, clear))
   let showTips = React.useMemo(_ =>
-    Env.showTips()->Option.map(v => v === "true" || v === "1")->Option.getOr(true) &&
+    Env.showTips->Option.map(v => v === "true" || v === "1")->Option.getOr(true) &&
       switch cliCommand {
       | Sync(_) => false
       | List({select: Some(_)}) => false
