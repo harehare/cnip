@@ -74,12 +74,12 @@ let make = (
   let maxRows = React.useMemo(
     _ =>
       displayRows->Option.getOr(numRows->Option.getOr(0)) -
-        (7 +
+        (6 +
         tabGroupCount -
         (canSearch ? 1 : 0)) < 0
         ? 10
         : displayRows->Option.getOr(numRows->Option.getOr(0)) -
-            (7 +
+            (6 +
             tabGroupCount -
             (canSearch ? 1 : 0)),
     (),

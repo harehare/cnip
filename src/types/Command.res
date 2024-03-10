@@ -27,7 +27,7 @@ type param = {name: string, value: string}
 
 let create = (~command, ~description, ~tag, ~alias, ~commandType) => {
   id: Uuid.V4.make(),
-  command: command->Js.String2.trim,
+  command: command->Js.String2.trim->Js.String2.replace("\n", ""),
   description,
   tag,
   alias,
@@ -36,7 +36,7 @@ let create = (~command, ~description, ~tag, ~alias, ~commandType) => {
 
 let createWithId = (~id, ~command, ~description, ~tag, ~alias, ~commandType) => {
   id: Uuid.V3.make(~name=id, ~namespace=#Uuid("77cdf7f7-7df4-4400-a993-539a6d3dad68")),
-  command: command->Js.String2.trim,
+  command: command->Js.String2.trim->Js.String2.replace("\n", ""),
   description,
   tag,
   alias,

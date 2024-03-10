@@ -1,12 +1,12 @@
 type t = {
-  history: string,
-  command: string,
-  externalCommand: string,
   clojure: string,
+  command: string,
   css: string,
   elm: string,
   elixir: string,
   erlang: string,
+  externalCommand: string,
+  dart: string,
   docker: string,
   dotnet: string,
   firebase: string,
@@ -14,11 +14,13 @@ type t = {
   golang: string,
   gradle: string,
   haskell: string,
+  history: string,
   java: string,
   json: string,
   javaScript: string,
   node: string,
   npm: string,
+  nim: string,
   makefile: string,
   markdown: string,
   mysql: string,
@@ -32,6 +34,7 @@ type t = {
   sbt: string,
   scala: string,
   shell: string,
+  svg: string,
   swift: string,
   typeScript: string,
   vue: string,
@@ -42,14 +45,14 @@ type t = {
 
 let icons = Env.showIcons
   ? {
-      history: "\u{f464}",
-      command: "\u{f44f}",
-      externalCommand: "\u{EB14}",
       clojure: "\u{e768}",
+      command: "\u{f121}",
       css: "\u{e749}",
       elm: "\u{e62c}",
       elixir: "\u{e62d}",
       erlang: "\u{e7b1}",
+      externalCommand: "\u{EB14}",
+      dart: "\u{e798}",
       docker: "\u{f308}",
       dotnet: "\u{e77f}",
       firebase: "\u{e657}",
@@ -57,11 +60,13 @@ let icons = Env.showIcons
       golang: "\u{e626}",
       gradle: "\u{E660}",
       haskell: "\u{e61f}",
+      history: "\u{f464}",
       java: "\u{e738}",
       json: "\u{e60b}",
       javaScript: "\u{e74e}",
       node: "\u{e719}",
       npm: "\u{e71e}",
+      nim: "\u{e677}",
       makefile: "\u{eb99}",
       markdown: "\u{e73e}",
       mysql: "\u{e704}",
@@ -75,6 +80,7 @@ let icons = Env.showIcons
       sbt: "\u{E68D}",
       scala: "\u{e737}",
       shell: "\u{e795}",
+      svg: "\u{e698}",
       swift: "\u{e755}",
       typeScript: "\u{fbe4}",
       vue: "\u{e6a0}",
@@ -83,14 +89,14 @@ let icons = Env.showIcons
       zig: "\u{e6a9}",
     }
   : {
-      history: "",
-      command: "",
-      externalCommand: "",
       clojure: "",
+      command: "",
       css: "",
       elm: "",
       elixir: "",
       erlang: "",
+      externalCommand: "",
+      dart: "",
       docker: "",
       dotnet: "",
       firebase: "",
@@ -98,11 +104,13 @@ let icons = Env.showIcons
       golang: "",
       gradle: "",
       haskell: "",
+      history: "",
       java: "",
       json: "",
       javaScript: "",
       node: "",
       npm: "",
+      nim: "",
       makefile: "",
       markdown: "",
       mysql: "",
@@ -116,6 +124,7 @@ let icons = Env.showIcons
       sbt: "",
       scala: "",
       shell: "",
+      svg: "",
       swift: "",
       typeScript: "",
       vue: "",
@@ -133,10 +142,12 @@ let getIcon = (name: string) =>
   | "elm" => icons.elm
   | "elixir" => icons.elixir
   | "erlang" => icons.erlang
+  | "dart" => icons.dart
   | "docker" => icons.docker
   | "dotnet" => icons.dotnet
   | "firebase" => icons.firebase
   | "fish" => icons.shell
+  | "flutter" => icons.dart
   | "git" => icons.git
   | "go" => icons.golang
   | "golang" => icons.golang
@@ -149,6 +160,7 @@ let getIcon = (name: string) =>
   | "node" => icons.node
   | "node.js" => icons.node
   | "npm" => icons.npm
+  | "nim" => icons.nim
   | "makefile" => icons.makefile
   | "markdown" => icons.markdown
   | "mysql" => icons.mysql
@@ -162,6 +174,7 @@ let getIcon = (name: string) =>
   | "sbt" => icons.sbt
   | "scala" => icons.scala
   | "shell" => icons.shell
+  | "svg" => icons.svg
   | "swift" => icons.swift
   | "ts" => icons.typeScript
   | "typescript" => icons.typeScript

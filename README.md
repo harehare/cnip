@@ -2,7 +2,7 @@
 
 cnip is a simple command-line snippet management tool.
 
-![image](./images/cnip.png)
+![image](./images/cnip.jpg)
 
 ## Install
 
