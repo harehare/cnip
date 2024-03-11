@@ -15,4 +15,4 @@ let showTips = Process.process->Process.env->Dict.get("CNIP_SHOW_TIPS")
 let gistId = Process.process->Process.env->Dict.get("CNIP_GIST_ID")
 
 let githubAccessToken =
-  Process.process->Process.env->Dict.get("CNIP_GITHUB_GIST_ACCESS_TOKEN")->Option.getExn
+  Process.process->Process.env->Dict.get("CNIP_GITHUB_GIST_ACCESS_TOKEN")->Option.getOr("")
