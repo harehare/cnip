@@ -207,8 +207,8 @@ let useImportCommand = (snippet: option<string>) => {
   }, (saveCommands, snippet))
 }
 
-let useAddCommand = (snippet: option<string>) => {
-  let (_, snippet) = useSnippet(snippet)
+let useAddCommand = (config: option<string>) => {
+  let (_, snippet) = useSnippet(config)
   let addCommand = React.useCallback(
     (command: Command.t) => [command]->Array.concat(snippet.commands),
     [snippet],
@@ -217,8 +217,8 @@ let useAddCommand = (snippet: option<string>) => {
   addCommand
 }
 
-let useEditCommand = (snippet: option<string>) => {
-  let (_, snippet) = useSnippet(snippet)
+let useEditCommand = (config: option<string>) => {
+  let (_, snippet) = useSnippet(config)
   let editCommand = React.useCallback(
     (command: Command.t) => snippet.commands->Array.map(c => c.id === command.id ? command : c),
     [snippet],

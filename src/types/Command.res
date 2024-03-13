@@ -15,6 +15,11 @@ type command = string
 
 type commandType = Snippet | History | Navi | Pet
 
+type commandParam = {
+  name: string,
+  defaultValue: option<string>,
+}
+
 type t = {
   id: string,
   command: string,
@@ -57,13 +62,24 @@ let toDisplayString = (c: t) => {
   | Navi => Icons.icons.externalCommand
   }
 
-  icon === "" ? c.command : `${icon} ${c.command}`
+  icon === ""
+    ? c.command
+    : `${icon} ${c.command}${c.alias->Option.map(alias => ` => ${alias}`)->Option.getOr("")}`
 }
 
-let params: string => array<string> = %raw(`
+let params: string => array<commandParam> = %raw(`
   function getParams(command) {
     const regexp = /<([\S][^\<]+?[\S])>/g;
-    return [...new Set([...command.matchAll(regexp)].flatMap(p => p[0]))];
+    return [...new Set([...command.matchAll(regexp)].flatMap(p => {
+      const param = p[0];
+      const params = param.split('=')
+
+      if (params.length === 2) {
+        return {name: params[0].replace("<", "").replace(">", ""), defaultValue: params[1].replace("<", "").replace(">", "")};
+      } else {
+        return {name: param.replace("<", "").replace(">", ""), defaultValue: undefined};
+      }
+    }))];
   }`)
 
 let filledParam = (command, p) => command->Js.String2.split(p.name)->Array.joinWith(p.value)
