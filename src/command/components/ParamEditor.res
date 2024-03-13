@@ -3,14 +3,14 @@ open Ink
 @react.component
 let make = (
   ~command: Command.t,
-  ~params: array<string>,
+  ~params: array<Command.commandParam>,
   ~onSubmit: array<Command.param> => unit,
 ) => {
   let (index, setIndex) = React.useState(_ => 0)
   let (error, setError) = React.useState(_ => false)
   let (params, setParams) = React.useState(_ =>
     params->Array.map(p => {
-      let p: Command.param = {name: p, value: ""}
+      let p: Command.param = {name: p.name, value: p.defaultValue->Option.getOr("")}
       p
     })
   )
@@ -63,16 +63,13 @@ let make = (
               />
             : param.value !== ""
             ? <ReadOnlyTextInput
-              prompt={param.name->Js.String2.replace("<", "")->Js.String2.replace(">", "")}
+              prompt={param.name}
               color=colors.selected
               icon={Figures.symbol.success}
               text={param.value}
             />
             : <ReadOnlyTextInput
-                prompt={param.name->Js.String2.replace("<", "")->Js.String2.replace(">", "")}
-                color=#gray
-                icon={Figures.symbol.pointer}
-                text={param.value}
+                prompt={param.name} color=#gray icon={Figures.symbol.pointer} text={param.value}
               />}
         </Box>
       )
