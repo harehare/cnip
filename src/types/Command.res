@@ -82,7 +82,12 @@ let params: string => array<commandParam> = %raw(`
     }))];
   }`)
 
-let filledParam = (command, p) => command->Js.String2.split(p.name)->Array.joinWith(p.value)
+let filledParam: (string, param) => string = %raw(`
+  function filledParam(command, param) {
+    const regexp = new RegExp("<(" + param.name + "([^\<]+)?)>");
+    return command.replace(regexp, param.value);
+  }`)
+
 let filledParams = (t, params) => {
   ...t,
   command: params->Array.reduce(t.command, (acc, p) => filledParam(acc, p)),

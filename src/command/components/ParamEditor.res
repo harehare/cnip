@@ -28,13 +28,13 @@ let make = (
 
   <Box flexDirection=#column paddingLeft=1>
     <TextView highlight={true}> {command.command->React.string} </TextView>
-    <Box paddingTop=1>
+    <Box flexDirection=#column paddingTop=1>
       {params
       ->Array.mapWithIndex((param, i) =>
         <Box key={param.name}>
           {i === index
             ? <TextInput
-                prompt={param.name->Js.String2.replace("<", "")->Js.String2.replace(">", "")}
+                prompt={param.name}
                 error={error}
                 default={param.value}
                 onChange={value => {
