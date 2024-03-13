@@ -1,7 +1,7 @@
 open Ink
 
 type edit = Command | Description | Tag | Alias | Complete
-type editStateValue = {enter: bool, error: bool}
+type editStateValue = {enter: bool, error: option<string>}
 type editState = {
   command: editStateValue,
   description: editStateValue,
@@ -22,18 +22,18 @@ let make = (
     )
   )
   let (editState, setEditState) = React.useState(_ => {
-    command: {enter: false, error: false},
-    description: {enter: false, error: false},
-    tag: {enter: false, error: false},
-    alias: {enter: false, error: false},
+    command: {enter: false, error: None},
+    description: {enter: false, error: None},
+    tag: {enter: false, error: None},
+    alias: {enter: false, error: None},
   })
   let colors = CommandHook.useColor()
   let validate = React.useCallback1((~edit, ~command) => {
     switch edit {
-    | Alias => aliasList->Array.includes(command)
-    | Description => false
-    | Tag => false
-    | _ => command->String.trim === ""
+    | Alias => aliasList->Array.includes(command) ? Some(`Alias '${command}' already exists`) : None
+    | Description => None
+    | Tag => None
+    | _ => command->String.trim === "" ? Some("Command is required") : None
     }
   }, [aliasList])
 
@@ -126,7 +126,7 @@ let make = (
       ? <TextInput
           prompt="Command"
           default={command.command}
-          error={editState.command.error}
+          error={editState.command.error->Option.isSome}
           onChange={c => {
             setEditState(_ => {
               ...editState,
@@ -138,7 +138,7 @@ let make = (
             setCurrent(_ => Description)
           }}
         />
-      : editState.command.error
+      : editState.command.error->Option.isSome
       ? <ReadOnlyTextInput
         prompt="Command" color=colors.error icon={Figures.symbol.pointer} text={command.command}
       />
@@ -153,7 +153,7 @@ let make = (
       ? <TextInput
           prompt="Description"
           default={command.description->Option.getOr("")}
-          error={editState.description.error}
+          error={editState.description.error->Option.isSome}
           onChange={description => {
             setEditState(_ => {
               ...editState,
@@ -165,7 +165,7 @@ let make = (
             setCurrent(_ => Tag)
           }}
         />
-      : editState.description.error
+      : editState.description.error->Option.isSome
       ? <ReadOnlyTextInput
         prompt="Description"
         color=colors.error
@@ -189,7 +189,7 @@ let make = (
       ? <TextInput
           prompt="Tag"
           default={command.tag->Array.joinWith(",")}
-          error={editState.tag.error}
+          error={editState.tag.error->Option.isSome}
           onChange={tag => {
             setEditState(_ => {
               ...editState,
@@ -201,7 +201,7 @@ let make = (
             setCurrent(_ => Alias)
           }}
         />
-      : editState.tag.error
+      : editState.tag.error->Option.isSome
       ? <ReadOnlyTextInput
         prompt="Tag"
         color=colors.error
@@ -222,7 +222,7 @@ let make = (
       ? <TextInput
           prompt="Alias"
           default={command.alias->Option.getOr("")}
-          error={editState.alias.error}
+          error={editState.alias.error->Option.isSome}
           onChange={alias => {
             setCommand(_ => {
               ...command,
@@ -235,16 +235,18 @@ let make = (
           }}
           onSubmit={_ => {
             if (
-              !editState.command.error &&
-              !editState.description.error &&
-              !editState.tag.error &&
-              !editState.alias.error
+              [
+                editState.command.error,
+                editState.description.error,
+                editState.tag.error,
+                editState.alias.error,
+              ]->Array.every(Option.isNone)
             ) {
               setCurrent(_ => Complete)
             }
           }}
         />
-      : editState.alias.error
+      : editState.alias.error->Option.isSome
       ? <ReadOnlyTextInput
         prompt="Alias"
         color=colors.error
@@ -264,5 +266,17 @@ let make = (
           icon={Figures.symbol.pointer}
           text={command.alias->Option.getOr("")}
         />}
+    {[
+      editState.command.error,
+      editState.description.error,
+      editState.tag.error,
+      editState.alias.error,
+    ]
+    ->Array.filterMap(error =>
+      error->Option.map(e =>
+        <Text color=#redBright> {`${Icons.icons.error} ${e}`->React.string} </Text>
+      )
+    )
+    ->React.array}
   </Box>
 }
