@@ -70,21 +70,24 @@ let toDisplayString = (c: t) => {
 let params: string => array<commandParam> = %raw(`
   function getParams(command) {
     const regexp = /<([\S][^\<]+?[\S])>/g;
-    return [...new Set([...command.matchAll(regexp)].flatMap(p => {
+
+    return Object.values(Object.fromEntries([...command.matchAll(regexp)].map(p => {
       const param = p[0];
       const params = param.split('=')
 
       if (params.length === 2) {
-        return {name: params[0].replace("<", "").replace(">", ""), defaultValue: params[1].replace("<", "").replace(">", "")};
+        const command = params[0].replace("<", "").replace(">", "");
+        return [command, {name: command, defaultValue: params[1].replace("<", "").replace(">", "")}];
       } else {
-        return {name: param.replace("<", "").replace(">", ""), defaultValue: undefined};
+        const command = param.replace("<", "").replace(">", "");
+        return [command, {name: command, defaultValue: undefined}];
       }
-    }))];
+    })));
   }`)
 
 let filledParam: (string, param) => string = %raw(`
   function filledParam(command, param) {
-    const regexp = new RegExp("<(" + param.name + "([^\<]+)?)>");
+    const regexp = new RegExp("<(" + param.name + "([^\<]+)?)>", 'g');
     return command.replace(regexp, param.value);
   }`)
 
