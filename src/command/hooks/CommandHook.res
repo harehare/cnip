@@ -237,14 +237,25 @@ let useDeleteCommands = (snippet: option<string>) => {
   deleteCommand
 }
 
-let useSyncCommands = (snippetPath: option<string>, ~gistId: option<string>) => {
+let useSyncCommands = (
+  snippetPath: option<string>,
+  ~gistId: option<string>,
+  ~createBackup: bool,
+) => {
   let (isSnippetLoading, snippets) = useSnippet(snippetPath)
   let (syncedGistId, setSyncedGistId) = React.useState(_ => None)
   let (action, setAction) = React.useState(_ => None)
   let (error, setError) = React.useState(_ => None)
+  let saveCommands = useSaveCommands(
+    Some(`${Constants.configDir}/snippet_${Js.Date.now()->Int.fromFloat->Int.toString}.json`),
+  )
 
   React.useEffect(() => {
     if !isSnippetLoading {
+      if createBackup {
+        saveCommands(snippets.commands)
+      }
+
       Config.Sync.sync(
         gistId
         ->Option.map(g => {

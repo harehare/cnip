@@ -2,7 +2,7 @@ open Ink
 
 @module("clipboardy") external writeToClipboard: string => unit = "writeSync"
 
-let version = "0.1.21"
+let version = "0.1.23"
 
 @react.component
 let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
@@ -150,7 +150,8 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
           )
         }}
       />
-    | Cli.Sync({snippet, gistId}) => <SyncCommand snippet={snippet} gistId={gistId} />
+    | Cli.Sync({snippet, gistId, createBackup}) =>
+      <SyncCommand snippet={snippet} gistId={gistId} createBackup={createBackup} />
     | Cli.Help(None) => <HelpCommand />
     | Cli.Help(Some(command)) => <HelpCommand command={command} />
     | Cli.Version => <Text bold={true}> {version->React.string} </Text>

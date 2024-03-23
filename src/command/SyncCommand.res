@@ -3,8 +3,8 @@ open Ink
 module Spinner = InkCommunity_Spinner
 
 @react.component
-let make = (~snippet: option<string>, ~gistId: option<string>) => {
-  let (action, gistId, error) = CommandHook.useSyncCommands(snippet, ~gistId)
+let make = (~snippet: option<string>, ~gistId: option<string>, ~createBackup: bool) => {
+  let (action, gistId, error) = CommandHook.useSyncCommands(snippet, ~gistId, ~createBackup)
 
   switch (action, gistId, error) {
   | (Some(action), Some(gistId), _) =>

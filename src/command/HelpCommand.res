@@ -76,7 +76,7 @@ let make = (~command: option<Cli.command>=?) => {
     Cli.Edit({snippet: None}),
     Cli.Delete({snippet: None}),
     Cli.Import({action: Cli.History(""), snippet: None}),
-    Cli.Sync({snippet: None, gistId: None}),
+    Cli.Sync({snippet: None, gistId: None, createBackup: false}),
     Cli.Version,
   ]
 
@@ -118,7 +118,7 @@ let make = (~command: option<Cli.command>=?) => {
         </Box>
       </Box>
     </Box>
-  | Some(Cli.Edit(_)) | Some(Cli.Delete(_)) | Some(Cli.Sync(_)) =>
+  | Some(Cli.Edit(_)) | Some(Cli.Delete(_)) =>
     <Box flexDirection=#column>
       <Box flexDirection=#column marginBottom={1}>
         <TextView primary={true}> {"USAGE:"->React.string} </TextView>
@@ -132,6 +132,29 @@ let make = (~command: option<Cli.command>=?) => {
         <TextView primary={true}> {"OPTIONS:"->React.string} </TextView>
         <Box flexDirection=#column paddingLeft={4}>
           <SnippetOption />
+          <HelpOption />
+        </Box>
+      </Box>
+    </Box>
+  | Some(Cli.Sync(_)) =>
+    <Box flexDirection=#column>
+      <Box flexDirection=#column marginBottom={1}>
+        <TextView primary={true}> {"USAGE:"->React.string} </TextView>
+        <Box flexDirection=#column paddingLeft={4}>
+          <TextView>
+            {`snip ${command->Option.getExn->Cli.commandToString} [OPTIONS]`->React.string}
+          </TextView>
+        </Box>
+      </Box>
+      <Box flexDirection=#column marginBottom={1}>
+        <TextView primary={true}> {"OPTIONS:"->React.string} </TextView>
+        <Box flexDirection=#column paddingLeft={4}>
+          <SnippetOption />
+          <Box>
+            <TextView> {"-b"->React.string} </TextView>
+            <Spacer />
+            <TextView> {"Create backup before sync"->React.string} </TextView>
+          </Box>
           <HelpOption />
         </Box>
       </Box>
