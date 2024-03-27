@@ -54,7 +54,7 @@ let toTagString = (c: t) => {
   tag->Array.joinWith(",")
 }
 
-let toDisplayString = (c: t) => {
+let toDisplayString = (c: t, ~showAlias: bool) => {
   let icon = switch c.commandType {
   | Snippet => Icons.icons.command
   | History => Icons.icons.history
@@ -64,7 +64,11 @@ let toDisplayString = (c: t) => {
 
   icon === ""
     ? c.command
-    : `${icon} ${c.command}${c.alias->Option.map(alias => ` => ${alias}`)->Option.getOr("")}`
+    : `${icon} ${c.command}${showAlias
+          ? c.alias
+            ->Option.map(alias => ` ${Figures.symbol.right} ${alias}`)
+            ->Option.getOr("")
+          : ""}`
 }
 
 let params: string => array<commandParam> = %raw(`

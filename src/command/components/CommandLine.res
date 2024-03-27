@@ -23,9 +23,11 @@ let make = (
   let colors = CommandHook.useColor()
   let displayCommand = React.useMemo(() => {
     if command.command->String.length > column {
-      `${command->Command.toDisplayString->String.slice(~start=0, ~end=column - 5)}…`
+      `${command
+        ->Command.toDisplayString(~showAlias=current)
+        ->String.slice(~start=0, ~end=column - 5)}…`
     } else {
-      command->Command.toDisplayString
+      command->Command.toDisplayString(~showAlias=current)
     }
   }, ())
   let displayDescription = React.useMemo(() => {
