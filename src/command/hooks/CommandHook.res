@@ -241,6 +241,7 @@ let useSyncCommands = (
   snippetPath: option<string>,
   ~gistId: option<string>,
   ~createBackup: bool,
+  ~downloadOnly: bool,
 ) => {
   let (isSnippetLoading, snippets) = useSnippet(snippetPath)
   let (syncedGistId, setSyncedGistId) = React.useState(_ => None)
@@ -249,6 +250,18 @@ let useSyncCommands = (
   let saveCommands = useSaveCommands(
     Some(`${Constants.configDir}/snippet_${Js.Date.now()->Int.fromFloat->Int.toString}.json`),
   )
+  let targetGistId =
+    gistId
+    ->Option.map(g => {
+      let config: Config.t = {gistId: g}
+      Some(config)
+    })
+    ->Option.getOr(
+      switch Config.read() {
+      | Ok(config) => Some(config)
+      | Error(_) => None
+      },
+    )
 
   React.useEffect(() => {
     if !isSnippetLoading {
@@ -256,21 +269,11 @@ let useSyncCommands = (
         saveCommands(snippets.commands)
       }
 
-      Config.Sync.sync(
-        gistId
-        ->Option.map(g => {
-          let config: Config.t = {gistId: g}
-          Some(config)
-        })
-        ->Option.getOr(
-          switch Config.read() {
-          | Ok(config) => Some(config)
-          | Error(_) => None
-          },
-        ),
-        snippets,
-        snippetPath->Option.getOr(Snippet.path),
-      )
+      if downloadOnly {
+        Config.Sync.syncDownloadOnly(targetGistId, snippetPath->Option.getOr(Snippet.path))
+      } else {
+        Config.Sync.sync(targetGistId, snippets, snippetPath->Option.getOr(Snippet.path))
+      }
       ->Promise.then(((action, gist)) => {
         setSyncedGistId(_ => Some(gist.data.id))
         setAction(_ => Some(action))

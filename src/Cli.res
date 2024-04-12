@@ -22,7 +22,7 @@ type rec command =
       tag: option<string>,
       select: option<string>,
     })
-  | Sync({snippet: option<string>, gistId: option<string>, createBackup: bool})
+  | Sync({snippet: option<string>, gistId: option<string>, createBackup: bool, downloadOnly: bool})
   | Help(option<command>)
   | Import({action: importAction, snippet: option<string>})
   | Version
@@ -178,6 +178,7 @@ let parse = (args: array<string>) => {
             snippet: o->S.field("snippet", S.string()->S.option),
             gistId: o->S.field("gist-id", S.string()->S.option),
             createBackup: o->S.field("b", S.bool()->S.option)->Option.getOr(false),
+            downloadOnly: o->S.field("d", S.bool()->S.option)->Option.getOr(false),
           })
         })->S.Object.strict,
         // add help
@@ -226,7 +227,7 @@ let parse = (args: array<string>) => {
         S.object(o => {
           ignore(o->S.field("_", S.tuple1(. S.literalVariant(String("sync"), ()))))
           ignore(o->S.field("h", S.bool()))
-          Help(Some(Sync({snippet: None, gistId: None, createBackup: false})))
+          Help(Some(Sync({snippet: None, gistId: None, createBackup: false, downloadOnly: false})))
         })->S.Object.strict,
         // help
         S.object(o => {

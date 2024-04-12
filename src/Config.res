@@ -111,4 +111,24 @@ module Sync = {
       })
     }
   }
+
+  let syncDownloadOnly = (config: option<t>, snippetPath: string) => {
+    switch config {
+    | Some(c) =>
+      download({gist_id: c.gistId})->Promise.then(gist => {
+        let gistSnippet = switch gist.data.files->Js.Dict.values->Array.get(0) {
+        | Some(gist) =>
+          Decode.decodeString(gist.content, Snippet.decoder)->Result.getOr({
+            tags: [],
+            commands: [],
+          })
+        | None => {tags: [], commands: []}
+        }
+
+        Snippet.write(snippetPath, gistSnippet)->ignore
+        Promise.resolve((Download, gist))
+      })
+    | None => Promise.reject(Exception.NotFound("git not found"))
+    }
+  }
 }

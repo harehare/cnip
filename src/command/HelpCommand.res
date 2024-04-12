@@ -76,7 +76,7 @@ let make = (~command: option<Cli.command>=?) => {
     Cli.Edit({snippet: None}),
     Cli.Delete({snippet: None}),
     Cli.Import({action: Cli.History(""), snippet: None}),
-    Cli.Sync({snippet: None, gistId: None, createBackup: false}),
+    Cli.Sync({snippet: None, gistId: None, createBackup: false, downloadOnly: false}),
     Cli.Version,
   ]
 
@@ -154,6 +154,11 @@ let make = (~command: option<Cli.command>=?) => {
             <TextView> {"-b"->React.string} </TextView>
             <Spacer />
             <TextView> {"Create backup before sync"->React.string} </TextView>
+          </Box>
+          <Box>
+            <TextView> {"-d"->React.string} </TextView>
+            <Spacer />
+            <TextView> {"Execute download only"->React.string} </TextView>
           </Box>
           <HelpOption />
         </Box>

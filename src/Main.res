@@ -150,8 +150,10 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
           )
         }}
       />
-    | Cli.Sync({snippet, gistId, createBackup}) =>
-      <SyncCommand snippet={snippet} gistId={gistId} createBackup={createBackup} />
+    | Cli.Sync({snippet, gistId, createBackup, downloadOnly}) =>
+      <SyncCommand
+        snippet={snippet} gistId={gistId} createBackup={createBackup} downloadOnly={downloadOnly}
+      />
     | Cli.Help(None) => <HelpCommand />
     | Cli.Help(Some(command)) => <HelpCommand command={command} />
     | Cli.Version => <Text bold={true}> {version->React.string} </Text>
