@@ -15,7 +15,7 @@ let make = (~snippet: option<string>, ~onSubmit: Command.t => unit) => {
     <Container>
       <CommandEditor
         editCommand={command}
-        aliasList={aliasList}
+        aliasList={aliasList->Array.filter(a => a !== command.alias->Option.getOr(""))}
         onSubmit={command => {
           saveCommand(editCommand(command))
           onSubmit(command)
