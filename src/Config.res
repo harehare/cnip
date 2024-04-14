@@ -112,7 +112,7 @@ module Sync = {
     }
   }
 
-  let syncDownloadOnly = (config: option<t>, snippetPath: string) => {
+  let syncDownloadOnly = (config: option<t>, snippet: Snippet.t, snippetPath: string) => {
     switch config {
     | Some(c) =>
       download({gist_id: c.gistId})->Promise.then(gist => {
@@ -125,7 +125,7 @@ module Sync = {
         | None => {tags: [], commands: []}
         }
 
-        Snippet.write(snippetPath, gistSnippet)->ignore
+        Snippet.write(snippetPath, snippet->Snippet.merge(gistSnippet))->ignore
         Promise.resolve((Download, gist))
       })
     | None => Promise.reject(Exception.NotFound("git not found"))

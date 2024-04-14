@@ -270,7 +270,11 @@ let useSyncCommands = (
       }
 
       if downloadOnly {
-        Config.Sync.syncDownloadOnly(targetGistId, snippetPath->Option.getOr(Snippet.path))
+        Config.Sync.syncDownloadOnly(
+          targetGistId,
+          snippets,
+          snippetPath->Option.getOr(Snippet.path),
+        )
       } else {
         Config.Sync.sync(targetGistId, snippets, snippetPath->Option.getOr(Snippet.path))
       }

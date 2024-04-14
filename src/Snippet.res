@@ -54,6 +54,26 @@ let isExists = (config: option<string>) => {
   Fs.existsSync(file)
 }
 
+let merge = (src: t, dest: t) => {
+  let tags =
+    src.tags
+    ->Array.concat(dest.tags)
+    ->Js.Array2.map(t => (t, t))
+    ->Js.Dict.fromArray
+    ->Js.Dict.values
+    ->Js.Array2.filter(tag => tag !== "")
+    ->Js.Array2.sortInPlace
+
+  let commands = dest.commands->Array.reduce([], (acc, destCommand) =>
+    switch src.commands->Array.find(c => c.id === destCommand.id) {
+    | Some(existCommand) => acc->Array.concat([existCommand])
+    | None => acc->Array.concat([destCommand])
+    }
+  )
+
+  {tags, commands}
+}
+
 module Pet = {
   type petSnippet = {command: string, description: string, tag: option<array<string>>}
   type petSnippets = {snippets: array<petSnippet>}
