@@ -151,6 +151,11 @@ let make = (~command: option<Cli.command>=?) => {
         <Box flexDirection=#column paddingLeft={4}>
           <SnippetOption />
           <Box>
+            <TextView> {"--gist-id"->React.string} </TextView>
+            <Spacer />
+            <TextView> {"Specify gist id to sync"->React.string} </TextView>
+          </Box>
+          <Box>
             <TextView> {"-b"->React.string} </TextView>
             <Spacer />
             <TextView> {"Create backup before sync"->React.string} </TextView>
