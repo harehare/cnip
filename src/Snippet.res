@@ -70,6 +70,14 @@ let merge = (src: t, dest: t) => {
     | None => acc->Array.concat([destCommand])
     }
   )
+  let commands = commands->Array.concat(
+    src.commands->Array.reduce([], (acc, srcCommand) =>
+      switch commands->Array.find(c => c.id === srcCommand.id) {
+      | Some(_) => acc
+      | None => acc->Array.concat([srcCommand])
+      }
+    ),
+  )
 
   {tags, commands}
 }
