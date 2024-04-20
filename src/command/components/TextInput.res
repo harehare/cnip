@@ -16,7 +16,6 @@ let make = (
     <Prompt prompt={prompt->Option.getOr("")} error={error} />
     <TextInput
       value={text}
-      highlightPastedText={true}
       onChange={s => {
         setText(_ => s)
         onChange(s)

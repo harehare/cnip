@@ -236,3 +236,38 @@ module Navi = {
   let readAsync = (filepath: string, onRead: array<Command.t> => unit) =>
     Modules.File.readAsync(filepath, text => text->parse->onRead)
 }
+
+module Stdin = {
+  let parse = (text: string) =>
+    text
+    ->String.split("\n")
+    ->Array.map(line => line->String.trim)
+    ->Set.fromArray
+    ->Set.values
+    ->Array.fromIterator
+    ->Array.filterMap(line =>
+      line === ""
+        ? None
+        : Some(
+            Command.createWithId(
+              ~id=line,
+              ~command=line,
+              ~description=None,
+              ~tag=[],
+              ~alias=None,
+              ~commandType=Stdin,
+            ),
+          )
+    )
+
+  let readAsync = (onRead: array<Command.t> => unit) => {
+    if !Modules.Stdin.isTty() {
+      NodeJs.Process.process
+      ->NodeJs.Process.stdin
+      ->Stream.Readable.onData(data => {
+        data->Buffer.toStringWithEncoding(StringEncoding.utf8)->parse->onRead
+      })
+      ->ignore
+    }
+  }
+}

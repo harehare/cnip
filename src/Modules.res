@@ -65,6 +65,14 @@ module Console = {
   let success = s => `\x1b[32m${s}\x1b[0m`
 }
 
+module Stdin = {
+  let isTty = %raw(`
+    function isTty() {
+      return process.stdin.isTTY;
+    }
+  `)
+}
+
 module File = {
   let readAsync = (filePath: string, onReadFile: string => unit) => {
     Fs.PromiseAPI.open_(~path=#Str(filePath), ~flags=Fs.Flag.read)->Promise.then(fd => {

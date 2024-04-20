@@ -13,7 +13,7 @@ external fuzzyOptions: (
 type name = string
 type command = string
 
-type commandType = Snippet | History | Navi | Pet
+type commandType = Snippet | History | Navi | Pet | Stdin
 
 type commandParam = {
   name: string,
@@ -60,6 +60,7 @@ let toDisplayString = (c: t, ~showAlias: bool) => {
   | History => Icons.icons.history
   | Pet => Icons.icons.externalCommand
   | Navi => Icons.icons.externalCommand
+  | Stdin => Icons.icons.shell
   }
 
   icon === ""

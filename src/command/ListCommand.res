@@ -9,11 +9,16 @@ let make = (
 ) => {
   let (isSnippetLoading, snippet) = CommandHook.useSnippet(snippet)
   let (isHistoryLoading, historyCommands) = CommandHook.useHistoryCommands(input)
+  let stdinCommands = CommandHook.useStdinCommands()
   let (commandAndParams, setCommandAndParams) = React.useState(_ => None)
   let commands = React.useMemo(
-    () => Array.concat(snippet.commands, historyCommands->Option.getOr([])),
-    (snippet.commands, historyCommands),
+    () =>
+      Array.concat(snippet.commands, historyCommands->Option.getOr([]))->Array.concat(
+        stdinCommands->Option.getOr([]),
+      ),
+    (snippet.commands, historyCommands, stdinCommands),
   )
+
   let (getStats, _) = CommandHook.useStats()
   let commands = React.useMemo(() => {
     switch sort {

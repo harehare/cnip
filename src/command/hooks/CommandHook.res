@@ -305,3 +305,20 @@ let useSyncCommands = (
 
   (action, syncedGistId, error)
 }
+
+let useStdinCommands = () => {
+  let (commands, setCommands) = React.useState(_ => None)
+  let (isLoaded, setLoaded) = React.useState(_ => false)
+
+  React.useEffect(() => {
+    Snippet.Stdin.readAsync(commands => {
+      if !isLoaded {
+        setCommands(_ => Some(commands))
+        setLoaded(_ => true)
+      }
+    })->ignore
+    None
+  }, [])
+
+  commands
+}
