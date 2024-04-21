@@ -12,10 +12,7 @@ let make = (
   let stdinCommands = CommandHook.useStdinCommands()
   let (commandAndParams, setCommandAndParams) = React.useState(_ => None)
   let commands = React.useMemo(
-    () =>
-      Array.concat(snippet.commands, historyCommands->Option.getOr([]))->Array.concat(
-        stdinCommands->Option.getOr([]),
-      ),
+    () => snippet.commands->Array.concatMany([historyCommands, stdinCommands]),
     (snippet.commands, historyCommands, stdinCommands),
   )
 

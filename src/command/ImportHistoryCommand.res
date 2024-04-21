@@ -9,7 +9,7 @@ let make = (~snippet: option<string>, ~histfile: string, ~onImport: array<Comman
   }, [importCommand, onImport])
 
   <CommandList
-    commands={historyCommands->Option.getOr([])}
+    commands={historyCommands}
     multiSelect={true}
     showTabs={false}
     query={None}

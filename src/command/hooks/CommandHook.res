@@ -113,9 +113,28 @@ let useNaviCommands = (config: option<string>) => {
   (isLoading, commands)
 }
 
+let useExternalCommands = (commands: array<Command.t>) => React.useMemo1(() => {
+    let re = Js.Re.fromString(": [0-9]{10}:[0-9]+;(.*)")
+    commands->Array.map(command => {
+      switch re->Js.Re.exec_(command.command) {
+      | Some(r) =>
+        Js.Re.captures(r)[1]
+        ->Option.map(
+          v => {
+            ...command,
+            command: v->Js.Nullable.toOption->Option.getOr(command.command),
+          },
+        )
+        ->Option.getOr(command)
+      | None => command
+      }
+    })
+  }, [commands])
+
 let useHistoryCommands = (histfile: option<string>) => {
   let (isLoading, setIsLoading) = React.useState(_ => false)
   let (histories, setHistories) = React.useState(_ => None)
+  let commands = useExternalCommands(histories->Option.getOr([]))
 
   React.useEffect(() => {
     histfile
@@ -123,28 +142,8 @@ let useHistoryCommands = (histfile: option<string>) => {
       setIsLoading(_ => true)
       Snippet.History.readAsync(
         f,
-        commands => {
-          let re = Js.Re.fromString(": [0-9]{10}:[0-9]+;(.*)")
-          setHistories(
-            _ => Some(
-              commands->Array.map(
-                command => {
-                  switch re->Js.Re.exec_(command.command) {
-                  | Some(r) =>
-                    Js.Re.captures(r)[1]
-                    ->Option.map(
-                      v => {
-                        ...command,
-                        command: v->Js.Nullable.toOption->Option.getOr(command.command),
-                      },
-                    )
-                    ->Option.getOr(command)
-                  | None => command
-                  }
-                },
-              ),
-            ),
-          )
+        histories => {
+          setHistories(_ => Some(histories))
           setIsLoading(_ => false)
         },
       )->ignore
@@ -153,7 +152,7 @@ let useHistoryCommands = (histfile: option<string>) => {
     None
   }, [histfile])
 
-  (isLoading, histories)
+  (isLoading, commands)
 }
 
 let useStats = () => {
@@ -307,13 +306,14 @@ let useSyncCommands = (
 }
 
 let useStdinCommands = () => {
-  let (commands, setCommands) = React.useState(_ => None)
+  let (stdinLines, setStdinLines) = React.useState(_ => None)
   let (isLoaded, setLoaded) = React.useState(_ => false)
+  let commands = useExternalCommands(stdinLines->Option.getOr([]))
 
   React.useEffect(() => {
     Snippet.Stdin.readAsync(commands => {
       if !isLoaded {
-        setCommands(_ => Some(commands))
+        setStdinLines(_ => Some(commands))
         setLoaded(_ => true)
       }
     })->ignore
