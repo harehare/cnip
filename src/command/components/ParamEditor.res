@@ -36,7 +36,7 @@ let make = (
             ? <TextInput
                 prompt={param.name}
                 error={error}
-                default={param.value}
+                text={param.value}
                 onChange={value => {
                   if value->String.trim === "" {
                     setError(_ => true)

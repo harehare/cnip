@@ -63,7 +63,7 @@ let make = (
     selectedTabCommands
     ->Array.filterMap(command => {
       let score = command->Command.match(searchText)
-      searchText === "" || score > 0.0 ? Some((score, command)) : None
+      searchText === "" || score >= 0.5 ? Some((score, command)) : None
     })
     ->Js.Array2.sortInPlaceWith((a, b) => {
       b->Tuple.first > a->Tuple.first ? 1 : a->Tuple.first == b->Tuple.first ? 0 : -1
@@ -121,9 +121,11 @@ let make = (
           ? selectableTags->Array.length - 1
           : Js.Math.max_int(0, selectedTab - 1)
       )
+      setSearchText(_ => "")
     } else if showTabs && key.rightArrow {
       let nextTab = Js.Math.min_int(selectedTab + 1, selectableTags->Array.length - 1)
       setSelectedTab(_ => selectedTab === nextTab ? 0 : nextTab)
+      setSearchText(_ => "")
       setLine(_ => 0)
     } else if multiSelect {
       if input === ' ' {
@@ -211,7 +213,7 @@ let make = (
     {!multiSelect && canSearch
       ? <Box>
           <TextInput
-            default={searchText}
+            text={searchText}
             onChange={s => {
               setSearchText(_ => s)
             }}

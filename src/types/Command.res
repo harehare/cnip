@@ -106,7 +106,7 @@ let match = (command: t, text: string) =>
     text,
     command.command,
     fuzzyOptions(~normalizeWhitespace=true, ~useSeparatedUnicode=true, ~useDamerau=true, ()),
-  ) *. (command.commandType === Snippet ? 1.25 : 1.0)
+  )
 
 let encode = (c: t): Json.value => {
   open Json.Encode

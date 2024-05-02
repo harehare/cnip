@@ -42,7 +42,7 @@
   ],
   "packageManager": "npm@10.2.4",
   "devDependencies": {
-    "@glennsl/rescript-jest": "^0.10.0",
+    "@glennsl/rescript-jest": "^0.11.0",
     "@rescript-ink/ink-link": "^3.0.0",
     "@rescript-ink/ink-spinner": "^3.0.0",
     "@rescript-ink/ink-text-input": "^3.0.0",

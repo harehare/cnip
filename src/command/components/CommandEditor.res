@@ -125,7 +125,7 @@ let make = (
     {current === Command
       ? <TextInput
           prompt="Command"
-          default={command.command}
+          text={command.command}
           error={editState.command.error->Option.isSome}
           onChange={c => {
             setEditState(_ => {
@@ -152,7 +152,7 @@ let make = (
     {current === Description
       ? <TextInput
           prompt="Description"
-          default={command.description->Option.getOr("")}
+          text={command.description->Option.getOr("")}
           error={editState.description.error->Option.isSome}
           onChange={description => {
             setEditState(_ => {
@@ -188,7 +188,7 @@ let make = (
     {current === Tag
       ? <TextInput
           prompt="Tag"
-          default={command.tag->Array.joinWith(",")}
+          text={command.tag->Array.joinWith(",")}
           error={editState.tag.error->Option.isSome}
           onChange={tag => {
             setEditState(_ => {
@@ -221,7 +221,7 @@ let make = (
     {current === Alias
       ? <TextInput
           prompt="Alias"
-          default={command.alias->Option.getOr("")}
+          text={command.alias->Option.getOr("")}
           error={editState.alias.error->Option.isSome}
           onChange={alias => {
             setCommand(_ => {

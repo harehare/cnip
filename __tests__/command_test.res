@@ -1,6 +1,6 @@
 open Jest
 
-let () = describe("parse params", () => {
+let _ = describe("parse params", () => {
   open ExpectJs
 
   test("has default value", () =>
