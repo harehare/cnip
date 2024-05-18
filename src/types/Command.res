@@ -1,14 +1,6 @@
-type fuzzyOptions
+type fuzzysortResult = {score: float}
 
-@obj
-external fuzzyOptions: (
-  ~normalizeWhitespace: bool=?,
-  ~useSeparatedUnicode: bool=?,
-  ~useDamerau: bool=?,
-  unit,
-) => fuzzyOptions = ""
-
-@module("fast-fuzzy") external fuzzy: (string, string, fuzzyOptions) => float = "fuzzy"
+@module("fuzzysort") external fuzzysort: (string, string) => Js.nullable<fuzzysortResult> = "single"
 
 type name = string
 type command = string
@@ -102,11 +94,10 @@ let filledParams = (t, params) => {
 }
 
 let match = (command: t, text: string) =>
-  fuzzy(
-    text,
-    command.command,
-    fuzzyOptions(~normalizeWhitespace=true, ~useSeparatedUnicode=true, ~useDamerau=true, ()),
-  )
+  fuzzysort(text, command.command)
+  ->Js.Nullable.toOption
+  ->Option.map(a => a.score)
+  ->Option.getOr(0.0)
 
 let encode = (c: t): Json.value => {
   open Json.Encode

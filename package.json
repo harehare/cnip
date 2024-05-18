@@ -29,7 +29,7 @@
   "dependencies": {
     "@octokit/rest": "^20.0.2",
     "clipboardy": "^2.3.0",
-    "fast-fuzzy": "^1.12.0",
+    "fuzzysort": "^3.0.1",
     "ink-text-input": "^4.0.3",
     "minimist": "^1.2.8",
     "toml": "^3.0.0",
