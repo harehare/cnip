@@ -63,7 +63,7 @@ let make = (
     selectedTabCommands
     ->Array.filterMap(command => {
       let score = command->Command.match(searchText)
-      searchText === "" || score >= 0.5 ? Some((score, command)) : None
+      searchText === "" || score >= 0.2 ? Some((score, command)) : None
     })
     ->Js.Array2.sortInPlaceWith((a, b) => {
       b->Tuple.first > a->Tuple.first ? 1 : a->Tuple.first == b->Tuple.first ? 0 : -1
@@ -74,12 +74,12 @@ let make = (
   let maxRows = React.useMemo(
     _ =>
       displayRows->Option.getOr(numRows->Option.getOr(0)) -
-        (6 +
+        (5 +
         tabGroupCount -
         (canSearch ? 1 : 0)) < 0
         ? 10
         : displayRows->Option.getOr(numRows->Option.getOr(0)) -
-            (6 +
+            (5 +
             tabGroupCount -
             (canSearch ? 1 : 0)),
     (),

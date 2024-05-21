@@ -28,6 +28,17 @@ let readAsync = (configPath: string, onRead: t => unit) => {
   })
 }
 
+let removePrefix = (line: string) => {
+  let re = Js.Re.fromString(": [0-9]{10}:[0-9]+;(.*)")
+  switch re->Js.Re.exec_(line) {
+  | Some(r) =>
+    Js.Re.captures(r)[1]
+    ->Option.map(v => v->Js.Nullable.toOption->Option.getOr(line))
+    ->Option.getOr(line)
+  | None => line
+  }
+}
+
 let updatedAt: string => string = %raw(`
 function(snippetPath) {
   const fs = require("fs");
@@ -119,7 +130,7 @@ module History = {
   let parse = (text: string) =>
     text
     ->String.split("\n")
-    ->Array.map(line => line->String.trim)
+    ->Array.map(line => line->String.trim->removePrefix)
     ->Set.fromArray
     ->Set.values
     ->Array.fromIterator
@@ -241,7 +252,7 @@ module Stdin = {
   let parse = (text: string) =>
     text
     ->String.split("\n")
-    ->Array.map(line => line->String.trim)
+    ->Array.map(line => line->String.trim->removePrefix)
     ->Set.fromArray
     ->Set.values
     ->Array.fromIterator
