@@ -27,6 +27,7 @@ let () = {
             query: None,
             tag: None,
             select: None,
+            exclude: None,
           }),
         ),
       )
@@ -72,6 +73,7 @@ let () = {
                 query: None,
                 tag: None,
                 select: None,
+                exclude: None,
               }),
             ),
           ),

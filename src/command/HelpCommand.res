@@ -41,6 +41,13 @@ module ListOption = {
       </TextView>
     </Box>
     <Box>
+      <TextView> {"--exclude [STRING]"->React.string} </TextView>
+      <Spacer />
+      <TextView>
+        {" Specify the pattern to exclude with a regular expression"->React.string}
+      </TextView>
+    </Box>
+    <Box>
       <TextView> {"--pet-snippet [STRING]"->React.string} </TextView>
       <Spacer />
       <Link url={"https://github.com/knqyf263/pet"}>
@@ -71,6 +78,7 @@ let make = (~command: option<Cli.command>=?) => {
       query: None,
       tag: None,
       select: None,
+      exclude: None,
     }),
     Cli.Add({command: None, snippet: None}),
     Cli.Edit({snippet: None}),

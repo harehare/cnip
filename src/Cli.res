@@ -21,6 +21,7 @@ type rec command =
       query: option<string>,
       tag: option<string>,
       select: option<string>,
+      exclude: option<string>,
     })
   | Sync({snippet: option<string>, gistId: option<string>, createBackup: bool, downloadOnly: bool})
   | Help(option<command>)
@@ -70,6 +71,7 @@ let parse = (args: array<string>) => {
         query: None,
         tag: None,
         select: None,
+        exclude: None,
       }),
     )
   } else {
@@ -93,6 +95,7 @@ let parse = (args: array<string>) => {
             query: o->S.field("query", S.string()->S.option),
             tag: o->S.field("tag", S.string()->S.option),
             select: o->S.field("select", S.string()->S.option),
+            exclude: o->S.field("exclude", S.string()->S.option),
             sort: o->S.field(
               "s",
               S.union([
@@ -117,6 +120,7 @@ let parse = (args: array<string>) => {
             query: o->S.field("query", S.string()->S.option),
             tag: o->S.field("tag", S.string()->S.option),
             select: o->S.field("select", S.string()->S.option),
+            exclude: o->S.field("exclude", S.string()->S.option),
             sort: o->S.field(
               "s",
               S.union([
@@ -213,6 +217,7 @@ let parse = (args: array<string>) => {
                 query: None,
                 tag: None,
                 select: None,
+                exclude: None,
               }),
             ),
           )

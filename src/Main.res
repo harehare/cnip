@@ -25,7 +25,7 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
 
   <>
     {switch cliCommand {
-    | Cli.List({action: Cli.Select, snippet, sort, input, query, tag, select}) =>
+    | Cli.List({action: Cli.Select, snippet, sort, input, query, tag, select, exclude}) =>
       switch select {
       | Some(select) =>
         <SelectCommand
@@ -50,6 +50,7 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
           sort
           input
           query
+          exclude
           defaultTag={tag}
           onSelect={command => {
             exit()
@@ -58,7 +59,7 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
         />
       }
 
-    | Cli.List({action: Cli.Copy, snippet, sort, input, query, tag, select}) =>
+    | Cli.List({action: Cli.Copy, snippet, sort, input, query, tag, select, exclude}) =>
       switch select {
       | Some(select) =>
         <SelectCommand
@@ -83,6 +84,7 @@ let make = (~cliCommand: Cli.command, ~clear: unit => unit) => {
           sort
           input
           query
+          exclude
           defaultTag={tag}
           onSelect={command => {
             exit()
