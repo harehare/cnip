@@ -36,7 +36,7 @@ try {
         }}
       />,
       ~exitOnCtrlC=true,
-      ~patchConsole=false,
+      ~patchConsole=true,
       ~stdout=stdout(),
       ~stdin=stdin(),
       (),

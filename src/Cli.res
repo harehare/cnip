@@ -181,7 +181,9 @@ let parse = (args: array<string>) => {
           Sync({
             snippet: o->S.field("snippet", S.string()->S.option),
             gistId: o->S.field("gist-id", S.string()->S.option),
-            createBackup: o->S.field("b", S.bool()->S.option)->Option.getOr(false),
+            createBackup: o
+            ->S.field("b", S.bool()->S.option)
+            ->Option.getOr(false),
             downloadOnly: o->S.field("d", S.bool()->S.option)->Option.getOr(false),
           })
         })->S.Object.strict,

@@ -13,13 +13,12 @@ let make = (
   let stdinCommands = CommandHook.useStdinCommands()
   let (commandAndParams, setCommandAndParams) = React.useState(_ => None)
   let excludePattern = React.useMemo0(() => exclude->Option.map(p => Js.Re.fromString(p)))
-  let commands = React.useMemo(() =>
-    snippet.commands
-    ->Array.concatMany([historyCommands, stdinCommands])
-    ->Array.filter(command =>
-      excludePattern->Option.map(p => p->Js.Re.test_(command.command)->not)->Option.getOr(true)
-    )
-  , (snippet.commands, historyCommands, stdinCommands, exclude))
+  let commands = React.useMemo(() => {
+    let c = snippet.commands->Array.concatMany([historyCommands, stdinCommands])
+    excludePattern
+    ->Option.map(p => c->Array.filter(command => p->Js.Re.test_(command.command)->not))
+    ->Option.getOr(c)
+  }, (snippet.commands, historyCommands, stdinCommands, exclude))
 
   let (getStats, _) = CommandHook.useStats()
   let commands = React.useMemo(() => {

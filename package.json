@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^20.1.1",
-    "clipboardy": "^4.0.0",
+    "clipboardy": "^2.3.0",
     "fuzzysort": "^3.0.1",
     "ink-text-input": "^4.0.3",
     "minimist": "^1.2.8",
@@ -46,7 +46,7 @@
     "@rescript-ink/ink-link": "^3.0.0",
     "@rescript-ink/ink-spinner": "^3.0.0",
     "@rescript-ink/ink-text-input": "^3.0.0",
-    "@rescript/core": "^1.4.0",
+    "@rescript/core": "^0.7.0",
     "@rescript/react": "^0.12.2",
     "esbuild": "^0.21.4",
     "react": "^18.3.1",
