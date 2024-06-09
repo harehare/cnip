@@ -151,6 +151,7 @@ let getIcon = (name: string) =>
   | "firebase" => icons.firebase
   | "fish" => icons.shell
   | "flutter" => icons.dart
+  | "github" => icons.git
   | "git" => icons.git
   | "go" => icons.golang
   | "golang" => icons.golang
