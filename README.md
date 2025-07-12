@@ -1,8 +1,8 @@
 # cnip - Command-line Snippet CLI Manager
 
-cnip is a simple command-line snippet management tool.
+cnip manages shell command snippets from the command line.
 
-![image](./images/cnip.gif)
+![image](./assets/demo.gif)
 
 ## Install
 
@@ -37,11 +37,11 @@ OPTIONS:
 
 ## Features
 
-- Add shell snippets
-- Interactive fuzzy search with edit, delete and copy to clipboard functionality
-- Tabbed display by tag
-- Import from History, Pet snippets and Navi Cheatsheet
-- Sync to gist
+- Store shell command snippets
+- Fuzzy search with edit, delete and clipboard copy
+- Tag-based organization
+- Import from shell history, Pet snippets, and Navi cheatsheets
+- GitHub Gist synchronization
 
 ### Shell commands
 
@@ -91,14 +91,13 @@ bindkey '^e' cmd-expand
 
 ### Sync to Gist
 
-You will need to obtain a Github access token.
-(only "gist" scope is needed)
+Requires a GitHub access token with "gist" scope.
 
-Create an environment variable name `$CNIP_GITHUB_GIST_ACCESS_TOKEN` and set the access token.
+Set the `CNIP_GITHUB_GIST_ACCESS_TOKEN` environment variable to your token.
 
 ## Customization
 
-You can customize the display by setting the following environment variables.
+Configure display colors with these environment variables:
 
 ```bash
 CNIP_HIGHLIGHT_COLOR="#FFBC00"
