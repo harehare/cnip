@@ -1,6 +1,6 @@
 {
   "name": "cnip-snippet",
-  "version": "0.1.33",
+  "version": "0.1.34",
   "keywords": [
     "rescript",
     "cli",
@@ -27,13 +27,13 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@octokit/rest": "^20.1.1",
-    "clipboardy": "^2.3.0",
-    "fuzzysort": "^3.0.1",
+    "@octokit/rest": "^22.0.0",
+    "clipboardy": "^4.0.0",
+    "fuzzysort": "^3.1.0",
     "ink-text-input": "^4.0.3",
     "minimist": "^1.2.8",
     "toml": "^3.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^11.1.0"
   },
   "files": [
     "dist",

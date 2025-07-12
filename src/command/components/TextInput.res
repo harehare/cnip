@@ -16,7 +16,8 @@ let make = (
       highlightPastedText={true}
       value={text}
       onChange={s => {
-        onChange(s)
+        let cleanedValue = %re("/\[200~|201~/g")->Js.String.replaceByRe("", s)
+        onChange(cleanedValue)
       }}
       onSubmit={onSubmit->Option.getOr(_ => ())}
     />
