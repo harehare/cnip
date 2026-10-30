@@ -33,7 +33,7 @@
     "ink-text-input": "^4.0.3",
     "minimist": "^1.2.8",
     "toml": "^3.0.0",
-    "uuid": "^11.1.0"
+    "uuid": "^14.0.3"
   },
   "files": [
     "dist",
