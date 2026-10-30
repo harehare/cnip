@@ -56,6 +56,6 @@
     "rescript-nodejs": "^16.1.0",
     "rescript-struct": "^4.1.1",
     "rescript-uuid": "^9.0.1",
-    "terser": "^5.31.1"
+    "terser": "^5.51.2"
   }
 }
