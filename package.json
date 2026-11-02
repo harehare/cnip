@@ -27,7 +27,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@octokit/rest": "^22.0.0",
+    "@octokit/rest": "^22.0.1",
     "clipboardy": "^4.0.0",
     "fuzzysort": "^3.1.0",
     "ink-text-input": "^4.0.3",
